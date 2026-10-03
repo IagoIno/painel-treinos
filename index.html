@@ -14,127 +14,219 @@
 <title>Mieruka de treinos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --vermelho:#EB0A1E; --preto:#000000; --branco:#FFFFFF; --grafite:#58595B;
-  --nevoa:#F2F2F2; --linha:#DCDCDC;
-  --verde:#12A150; --amarelo:#F5B300; --apagado:#6E6E6E;
+  --nevoa:#F2F2F2; --linha:#DCDCDC; --escuro:#1A1A1A; --cinza-texto:#B5B5B5;
+  --verde:#12A150; --amarelo:#F5B300;
   --cond:"Barlow Condensed","Arial Narrow",sans-serif;
   --texto:"Barlow",system-ui,sans-serif;
-  --gutter:16px;
+  --g:16px; --nav:64px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{background:var(--branco);color:var(--preto);font:400 16px/1.5 var(--texto);
-  padding-bottom:env(safe-area-inset-bottom)}
-button,input{font:inherit;color:inherit}
+body{background:var(--branco);color:var(--preto);font:400 16px/1.5 var(--texto)}
+button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--vermelho);outline-offset:2px}
 .oculto{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.num{font-family:var(--cond);font-variant-numeric:tabular-nums}
 
-/* ---------- tela do PIN ---------- */
-#trava{min-height:100vh;min-height:100dvh;background:var(--preto);color:var(--branco);
-  display:flex;flex-direction:column;justify-content:center;padding:32px var(--gutter)}
+/* ---------- PIN ---------- */
+#trava{min-height:100dvh;background:var(--preto);color:var(--branco);display:flex;flex-direction:column;justify-content:center;padding:32px var(--g)}
 #trava .caixa{max-width:340px;width:100%;margin:0 auto}
-#trava .lampadas{display:flex;gap:10px;margin-bottom:28px}
-#trava .lampadas i{width:18px;height:18px;border-radius:50%;background:#2A2A2A}
-#trava .lampadas i:nth-child(3){background:var(--vermelho)}
-#trava h1{font:700 44px/1 var(--cond);letter-spacing:.01em;margin-bottom:8px}
-#trava p{color:#BDBDBD;margin-bottom:28px}
-#trava input[type=password]{width:100%;background:transparent;border:0;border-bottom:2px solid #444;
-  font:600 36px/1.2 var(--cond);letter-spacing:.35em;padding:8px 0;color:var(--branco)}
-#trava input[type=password]:focus{outline:0;border-color:var(--vermelho)}
-#trava label.lembrar{display:flex;gap:10px;align-items:center;margin:18px 0 26px;color:#BDBDBD;font-size:15px}
-#trava label.lembrar input{width:20px;height:20px;accent-color:var(--vermelho)}
-.botao{display:block;width:100%;background:var(--vermelho);color:var(--branco);border:0;border-radius:2px;
-  font:700 20px/1 var(--cond);letter-spacing:.03em;padding:16px;cursor:pointer}
+#trava .luzes{display:flex;gap:10px;margin-bottom:28px}
+#trava .luzes i{width:18px;height:18px;border-radius:50%;background:#2E2E2E}
+#trava .luzes i:last-child{background:var(--vermelho)}
+#trava h1{font:700 44px/1 var(--cond);margin-bottom:8px}
+#trava p{color:var(--cinza-texto);margin-bottom:28px}
+#pin{width:100%;background:transparent;border:0;border-bottom:2px solid #444;font:600 36px/1.2 var(--cond);letter-spacing:.35em;padding:8px 0;color:var(--branco)}
+#pin:focus{outline:0;border-color:var(--vermelho)}
+.lembrar{display:flex;gap:10px;align-items:center;margin:18px 0 26px;color:var(--cinza-texto);font-size:15px}
+.lembrar input{width:20px;height:20px;accent-color:var(--vermelho)}
+.botao{display:block;width:100%;background:var(--vermelho);color:var(--branco);border:0;border-radius:2px;font:700 20px/1 var(--cond);padding:16px;cursor:pointer}
 #erro{color:#FF6B76;margin-top:16px;min-height:1.5em;font-size:15px}
 
-/* ---------- andon (topo) ---------- */
-.andon{background:var(--preto);color:var(--branco);padding:calc(18px + env(safe-area-inset-top)) var(--gutter) 28px}
-.andon .topo{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px}
-.andon .marca{font:700 22px/1 var(--cond);letter-spacing:.02em}
-.andon .marca b{color:var(--vermelho)}
-.andon .data{font:500 17px/1 var(--cond);color:#BDBDBD}
-.lampadas-andon{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#262626;border:2px solid #262626}
-.lampada{background:#0E0E0E;padding:18px 8px 14px;text-align:center}
-.lampada .luz{width:58px;height:58px;border-radius:50%;margin:0 auto 12px;background:#2A2A2A;
-  box-shadow:inset 0 -6px 10px rgba(0,0,0,.35)}
-.lampada[data-cor=verde] .luz{background:var(--verde);box-shadow:0 0 26px rgba(18,161,80,.55),inset 0 -6px 10px rgba(0,0,0,.25)}
-.lampada[data-cor=amarelo] .luz{background:var(--amarelo);box-shadow:0 0 26px rgba(245,179,0,.55),inset 0 -6px 10px rgba(0,0,0,.2)}
-.lampada[data-cor=vermelho] .luz{background:var(--vermelho);box-shadow:0 0 26px rgba(235,10,30,.6),inset 0 -6px 10px rgba(0,0,0,.25)}
-.lampada[data-cor=cinza] .luz{background:#3A3A3A;box-shadow:inset 0 0 0 3px #555}
+/* ---------- estrutura ---------- */
+#app{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom))}
+.view{min-height:calc(100dvh - var(--nav))}
+.miolo{max-width:720px;margin:0 auto;padding:0 var(--g)}
+.bloco{padding:26px 0 8px;border-bottom:1px solid var(--linha)}
+.bloco:last-child{border-bottom:0}
+.bloco>h2{font:700 25px/1.1 var(--cond);margin-bottom:12px}
+.bloco>h2+.sub{margin-top:-8px}
+.sub{font-size:14.5px;color:var(--grafite);margin-bottom:12px;max-width:62ch}
+.leitura{font-size:15px;color:var(--grafite);margin:8px 0 12px;max-width:62ch}
+.leitura b{color:var(--preto);font-weight:600}
+.vazio{color:var(--grafite);font-size:15px;padding:6px 0 16px}
+
+/* ---------- topo preto das abas ---------- */
+.cabeca{background:var(--preto);color:var(--branco);padding:calc(14px + env(safe-area-inset-top)) var(--g) 0}
+.cabeca .linha1{display:flex;justify-content:space-between;align-items:baseline;max-width:720px;margin:0 auto 14px}
+.cabeca h1{font:700 30px/1 var(--cond)}
+.cabeca .meta{font:500 16px/1 var(--cond);color:var(--cinza-texto)}
+
+/* filtros */
+.filtros{position:sticky;top:0;z-index:5;background:var(--preto);padding:0 var(--g) 12px}
+.filtros .faixa{max-width:720px;margin:0 auto}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chips+.chips{margin-top:8px}
+.chip{flex:0 0 auto;background:transparent;color:var(--branco);border:1.5px solid #4A4A4A;border-radius:2px;font:600 16px/1 var(--cond);padding:8px 12px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--branco);color:var(--preto);border-color:var(--branco)}
+.chip.vermelho[aria-pressed=true]{background:var(--vermelho);border-color:var(--vermelho);color:var(--branco)}
+.datas{display:flex;gap:8px;margin-top:10px;align-items:center;color:var(--cinza-texto);font-size:14px}
+.datas input{background:var(--escuro);border:1px solid #4A4A4A;color:var(--branco);padding:7px 8px;border-radius:2px;font-size:15px;color-scheme:dark;min-width:0;flex:1}
+
+/* ---------- HOJE: andon ---------- */
+.andon{background:var(--preto);color:var(--branco);padding:calc(16px + env(safe-area-inset-top)) var(--g) 26px}
+.andon>*{max-width:720px;margin-left:auto;margin-right:auto}
+.andon .linha1{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px}
+.marca{font:700 22px/1 var(--cond)}
+.marca i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--vermelho);margin-left:6px;vertical-align:2px}
+.andon .data{font:500 17px/1 var(--cond);color:var(--cinza-texto);text-transform:none}
+.lampadas{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#262626;border:2px solid #262626}
+.lampada{all:unset;cursor:pointer;background:#0E0E0E;padding:16px 6px 12px;text-align:center;display:block}
+.lampada:focus-visible{outline:3px solid var(--vermelho);outline-offset:-3px}
+.luz{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;background:#2A2A2A}
+[data-cor=verde] .luz{background:var(--verde);box-shadow:0 0 24px rgba(18,161,80,.55)}
+[data-cor=amarelo] .luz{background:var(--amarelo);box-shadow:0 0 24px rgba(245,179,0,.5)}
+[data-cor=vermelho] .luz{background:var(--vermelho);box-shadow:0 0 24px rgba(235,10,30,.6)}
+[data-cor=cinza] .luz{background:#3A3A3A;box-shadow:inset 0 0 0 3px #555}
 .lampada .nome{font:600 18px/1.1 var(--cond)}
-.lampada .estado{font-size:13px;color:#A8A8A8;margin-top:2px}
-.lampada button{all:unset;cursor:pointer;display:block}
-.detalhe-lampada{background:#161616;color:#D8D8D8;font-size:15px;padding:12px 14px;margin-top:2px;line-height:1.45}
-.acao{margin-top:26px;border-left:6px solid var(--vermelho);padding-left:14px}
-.acao h2{font:600 16px/1 var(--cond);color:#BDBDBD;margin-bottom:8px;letter-spacing:.02em}
-.acao p{font:600 26px/1.15 var(--cond);letter-spacing:.005em}
-.acao p.extra{font:400 16px/1.45 var(--texto);color:#D0D0D0;margin-top:10px}
+.lampada .estado{font-size:13px;color:#A8A8A8}
+.detalhe{background:#161616;color:#D8D8D8;font-size:15px;padding:12px 14px;margin-top:2px}
+.acao{margin-top:24px;border-left:6px solid var(--vermelho);padding-left:14px}
+.acao .rot{font:600 16px/1 var(--cond);color:var(--cinza-texto);margin-bottom:8px}
+.acao p{font:600 26px/1.15 var(--cond)}
+.coach-linha{margin-top:18px;display:flex;gap:12px;align-items:flex-start;color:#DADADA;font-size:15.5px;line-height:1.45}
+.apito{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--vermelho);display:grid;place-items:center;font:800 17px/1 var(--cond);color:var(--branco)}
 @media (prefers-reduced-motion:no-preference){
-  .lampada .luz{animation:acende .9s ease-out both}
+  .luz{animation:acende .9s ease-out both}
   .lampada:nth-child(2) .luz{animation-delay:.18s}
   .lampada:nth-child(3) .luz{animation-delay:.36s}
-  @keyframes acende{from{filter:brightness(.15);box-shadow:none}to{filter:none}}
+  @keyframes acende{from{filter:brightness(.15);box-shadow:none}}
 }
 
-/* ---------- corpo ---------- */
-main{max-width:720px;margin:0 auto;padding:0 var(--gutter)}
-section{padding:30px 0 6px;border-bottom:1px solid var(--linha)}
-section:last-of-type{border-bottom:0}
-section>h2{font:700 26px/1.1 var(--cond);margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-section>h2 small{font:500 15px/1 var(--texto);color:var(--grafite)}
+/* semana (plano x real) mini */
+.semana{display:grid;grid-template-columns:repeat(7,1fr);border-top:2px solid var(--preto)}
+.dia{text-align:center;padding:10px 0 8px;border-right:1px solid var(--linha)}
+.dia:last-child{border-right:0}
+.dia .d{font:600 15px/1 var(--cond);color:var(--grafite)}
+.dia.hoje .d{color:var(--vermelho)}
+.dia .marca-dia{width:30px;height:30px;margin:8px auto 4px;display:grid;place-items:center;font:700 15px/1 var(--cond);border-radius:2px}
+.m-feito{background:var(--preto);color:var(--branco)}
+.m-feito.corrida{background:var(--vermelho)}
+.m-planejado{border:1.5px dashed var(--grafite);color:var(--grafite)}
+.m-faltou{border:1.5px solid var(--vermelho);color:var(--vermelho)}
+.m-livre{color:#B0B0B0}
+.dia .p{font-size:11.5px;color:var(--grafite);line-height:1.2;min-height:2.4em}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--grafite);margin:10px 0 4px}
+.legenda span::before{content:"";display:inline-block;width:11px;height:11px;margin-right:5px;vertical-align:-1px;border-radius:1px}
+.legenda .l1::before{background:var(--vermelho)} .legenda .l2::before{background:var(--preto)}
+.legenda .l3::before{border:1.5px dashed var(--grafite)} .legenda .l4::before{border:1.5px solid var(--vermelho)}
 
-.indicadores{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--preto)}
-.ind{padding:12px 0 14px;border-bottom:1px solid var(--linha)}
+/* indicadores */
+.inds{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--preto)}
+.ind{padding:12px 0 12px;border-bottom:1px solid var(--linha);display:grid;grid-template-columns:1fr 64px;gap:4px;align-items:end;background:none;border-left:0;border-right:0;border-top:0;text-align:left;cursor:pointer}
 .ind:nth-child(odd){padding-right:12px;border-right:1px solid var(--linha)}
-.ind:nth-child(even){padding-left:14px}
-.ind .rot{font-size:14px;color:var(--grafite)}
-.ind .val{font:700 34px/1.05 var(--cond)}
-.ind .val small{font:500 16px/1 var(--cond);color:var(--grafite);margin-left:3px}
-.ind .var{font-size:13px;color:var(--grafite)}
-.ind .var.bom{color:var(--verde)} .ind .var.ruim{color:var(--vermelho)}
+.ind:nth-child(even){padding-left:12px}
+.ind .rot{font-size:14px;color:var(--grafite);grid-column:1/-1}
+.ind .val{font:700 32px/1 var(--cond)}
+.ind .val small{font:500 15px/1 var(--cond);color:var(--grafite);margin-left:3px}
+.ind .var{font-size:12.5px;color:var(--grafite);grid-column:1/-1}
+.bom{color:var(--verde)!important} .ruim{color:var(--vermelho)!important}
+.ind svg{width:64px;height:28px}
 
-.abas{display:flex;gap:0;overflow-x:auto;border:2px solid var(--preto);margin-bottom:12px;scrollbar-width:none}
-.abas button{flex:1 0 auto;background:var(--branco);border:0;border-right:1px solid var(--preto);
-  font:600 16px/1 var(--cond);padding:10px 12px;cursor:pointer;white-space:nowrap}
-.abas button:last-child{border-right:0}
-.abas button[aria-pressed=true]{background:var(--preto);color:var(--branco)}
-.periodo{display:flex;gap:16px;margin:4px 0 6px;font-size:15px}
-.periodo button{background:none;border:0;border-bottom:2px solid transparent;padding:2px 0;cursor:pointer;color:var(--grafite)}
-.periodo button[aria-pressed=true]{color:var(--preto);border-color:var(--vermelho);font-weight:600}
-.grafico svg{display:block;width:100%;height:auto}
-.leitura{font-size:15px;color:var(--grafite);margin:8px 0 10px}
+/* gráficos */
+.grafico svg{display:block;width:100%;height:auto;overflow:visible}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--preto);margin-top:6px}
+.stat{padding:10px 6px 10px 0;border-right:1px solid var(--linha)}
+.stat:last-child{border-right:0}
+.stat:not(:first-child){padding-left:8px}
+.stat .r{font-size:12.5px;color:var(--grafite);line-height:1.2}
+.stat .v{font:700 24px/1.1 var(--cond)}
+.barras-h{display:grid;gap:8px;margin:6px 0 4px}
+.bh{display:grid;grid-template-columns:76px 1fr 42px;gap:10px;align-items:center;font-size:14px}
+.bh .trilho{height:18px;background:var(--nevoa);position:relative}
+.bh .enche{height:100%;background:var(--preto)}
+.bh .enche.top{background:var(--vermelho)}
+.bh .n{font:700 18px/1 var(--cond);text-align:right}
 
-.vazio{color:var(--grafite);font-size:15px;padding:8px 0 18px}
+/* intensidade 80/20 */
+.mix{display:flex;height:30px;margin:6px 0 6px;position:relative}
+.mix div{height:100%}
+.mix .alvo{position:absolute;left:80%;top:-6px;bottom:-6px;width:2px;background:var(--preto)}
+.mix-leg{display:flex;justify-content:space-between;font-size:13.5px;color:var(--grafite)}
+.mix-leg b{font:700 18px/1 var(--cond);color:var(--preto);margin-right:4px}
 
+/* lista de treinos */
+.mes{font:700 17px/1 var(--cond);color:var(--grafite);padding:16px 0 6px;border-bottom:2px solid var(--preto)}
+.treino{display:grid;grid-template-columns:44px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--linha);align-items:center}
+.treino .ic{width:40px;height:40px;display:grid;place-items:center;font:700 16px/1 var(--cond);background:var(--preto);color:var(--branco)}
+.treino .ic.corrida{background:var(--vermelho)}
+.treino .t1{font-weight:600;font-size:15.5px;line-height:1.25}
+.treino .t2{font-size:13.5px;color:var(--grafite)}
+.treino .t3{font:700 20px/1 var(--cond);text-align:right}
+.treino .t3 small{display:block;font:500 13px/1.3 var(--texto);color:var(--grafite)}
+.mais{display:block;margin:14px auto 6px;background:none;border:1.5px solid var(--preto);padding:9px 16px;font:600 16px/1 var(--cond);cursor:pointer}
+
+/* COACH */
+.fase{background:var(--preto);color:var(--branco);padding:calc(16px + env(safe-area-inset-top)) var(--g) 26px}
+.fase>*{max-width:720px;margin-left:auto;margin-right:auto}
+.escada{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:18px auto 18px}
+.degrau{background:#1C1C1C;padding:10px 10px 9px;font:600 16px/1.1 var(--cond);color:#8A8A8A;border-top:4px solid #333}
+.degrau.feito{color:#CFCFCF;border-top-color:#777}
+.degrau.agora{background:var(--branco);color:var(--preto);border-top-color:var(--vermelho)}
+.degrau small{display:block;font:400 12.5px/1.3 var(--texto);margin-top:3px;color:inherit;opacity:.8}
+.fase h1{font:800 46px/.95 var(--cond)}
+.fase .semtxt{font:500 18px/1 var(--cond);color:var(--cinza-texto);margin-top:6px}
+.fase blockquote{margin-top:18px;font-size:16.5px;line-height:1.5;color:#E6E6E6;border-left:6px solid var(--vermelho);padding-left:14px;max-width:60ch}
+.quadro{width:100%;border-collapse:collapse;font-size:14.5px}
+.quadro th{font:600 14px/1 var(--texto);color:var(--grafite);text-align:left;padding:8px 6px 8px 0;border-bottom:2px solid var(--preto)}
+.quadro td{padding:10px 6px 10px 0;border-bottom:1px solid var(--linha);vertical-align:top}
+.quadro td.dd{font:700 18px/1.1 var(--cond);width:44px}
+.quadro td.dd small{display:block;font:400 12px/1.2 var(--texto);color:var(--grafite)}
+.quadro .tt{font-weight:600}
+.quadro .det{font-size:13px;color:var(--grafite)}
+.quadro td.st{width:30px;text-align:center;font:700 18px/1 var(--cond)}
+.quadro tr.hoje td{background:#FFF1F2}
+.ok{color:var(--verde)} .nao{color:var(--vermelho)} .fut{color:#B0B0B0}
+.aderencia{display:flex;align-items:baseline;gap:10px;margin:12px 0 6px}
+.aderencia .v{font:800 40px/1 var(--cond)}
+.regua{position:relative;height:96px;margin:8px 30px 4px}
+.regua .eixo{position:absolute;left:-30px;right:-30px;top:44px;height:4px;background:var(--nevoa)}
+.regua .trecho{position:absolute;top:44px;height:4px;background:var(--preto)}
+.regua .pt{position:absolute;top:36px;width:20px;height:20px;margin-left:-10px;border-radius:50%;border:3px solid var(--branco)}
+.regua .lbl{position:absolute;top:62px;text-align:center;transform:translateX(-50%);font-size:12.5px;color:var(--grafite);white-space:nowrap}
+.regua .lbl b{font:700 16px/1 var(--cond);color:var(--preto);display:block;text-align:center}
+.regua .lbl.cima{top:0}
 .dicas{list-style:none}
-.dicas li{border-left:6px solid var(--apagado);padding:2px 0 2px 14px;margin-bottom:18px}
-.dicas li[data-n="3"]{border-color:var(--vermelho)}
-.dicas li[data-n="2"]{border-color:var(--amarelo)}
-.dicas li[data-n="0"]{border-color:var(--verde)}
-.dicas h3{font:700 20px/1.15 var(--cond);margin-bottom:4px}
+.dicas li{border-left:6px solid #9A9A9A;padding:2px 0 2px 14px;margin-bottom:18px}
+.dicas li[data-n="3"]{border-color:var(--vermelho)} .dicas li[data-n="2"]{border-color:var(--amarelo)} .dicas li[data-n="0"]{border-color:var(--verde)}
+.dicas h3{font:700 20px/1.15 var(--cond);margin-bottom:3px}
 .dicas p{font-size:15.5px;max-width:62ch}
+table.rec{width:100%;border-collapse:collapse;font-size:15px}
+table.rec th,table.rec td{text-align:left;padding:9px 0;border-bottom:1px solid var(--linha)}
+table.rec th{font:600 14px/1 var(--texto);color:var(--grafite);border-bottom:2px solid var(--preto)}
+table.rec td.t{font:700 22px/1 var(--cond)}
+table.rec td small{display:block;font:400 12.5px/1.3 var(--texto);color:var(--grafite)}
 
-table{width:100%;border-collapse:collapse;font-size:15.5px}
-th,td{text-align:left;padding:9px 0;border-bottom:1px solid var(--linha);vertical-align:baseline}
-th{font:600 15px/1 var(--texto);color:var(--grafite);border-bottom:2px solid var(--preto)}
-td.t{font:700 22px/1 var(--cond)}
-td.d{color:var(--grafite);font-size:14px}
+/* rodapé + barra de abas */
+.rodape{max-width:720px;margin:0 auto;padding:18px var(--g) 26px;display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--grafite);font-size:13.5px;flex-wrap:wrap}
+.rodape button{background:none;border:1.5px solid var(--preto);border-radius:2px;padding:7px 12px;font:600 15px/1 var(--cond);cursor:pointer}
+.abas{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--preto);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid #222}
+.aba{background:none;border:0;color:#9A9A9A;height:var(--nav);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:600 14px/1 var(--cond);cursor:pointer;position:relative}
+.aba svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+.aba[aria-current=page]{color:var(--branco)}
+.aba[aria-current=page]::before{content:"";position:absolute;top:0;left:28%;right:28%;height:3px;background:var(--vermelho)}
 
-footer{max-width:720px;margin:0 auto;padding:22px var(--gutter) 36px;display:flex;justify-content:space-between;
-  align-items:center;gap:12px;color:var(--grafite);font-size:14px;flex-wrap:wrap}
-footer .botoes{display:flex;gap:10px}
-footer button{background:none;border:1.5px solid var(--preto);color:var(--preto);border-radius:2px;
-  padding:8px 14px;font:600 15px/1 var(--cond);cursor:pointer}
 @media (min-width:700px){
-  .lampada .luz{width:76px;height:76px}
+  .inds{grid-template-columns:repeat(3,1fr)}
+  .ind:nth-child(odd),.ind:nth-child(even){padding:12px;border-right:1px solid var(--linha)}
+  .luz{width:72px;height:72px}
   .acao p{font-size:32px}
-  .indicadores{grid-template-columns:repeat(3,1fr)}
-  .ind:nth-child(odd),.ind:nth-child(even){padding:12px 14px 14px;border-right:1px solid var(--linha)}
-  .ind:nth-child(3n){border-right:0}
 }
 </style>
 </head>
@@ -142,7 +234,7 @@ footer button{background:none;border:1.5px solid var(--preto);color:var(--preto)
 
 <div id="trava">
   <form class="caixa" id="formPin" autocomplete="off">
-    <div class="lampadas" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="luzes" aria-hidden="true"><i></i><i></i><i></i></div>
     <h1>Mieruka de treinos</h1>
     <p>Digite o PIN que você criou no computador.</p>
     <label class="sr" for="pin">PIN</label>
@@ -154,287 +246,567 @@ footer button{background:none;border:1.5px solid var(--preto);color:var(--preto)
 </div>
 
 <div id="app" class="oculto">
-  <header class="andon">
-    <div class="topo"><span class="marca">Mieruka <b>●</b></span><span class="data" id="data"></span></div>
-    <div class="lampadas-andon" id="lampadas"></div>
-    <div id="detalhe" class="detalhe-lampada oculto" aria-live="polite"></div>
-    <div class="acao"><h2>Ação do dia</h2><p id="acao"></p><p class="extra" id="ultima"></p></div>
-  </header>
 
-  <main>
-    <section>
-      <h2>Indicadores de hoje <small>comparados à sua média de 30 dias</small></h2>
-      <div class="indicadores" id="indicadores"></div>
-    </section>
-
-    <section>
-      <h2>Evolução</h2>
-      <div class="abas" id="abas" role="group" aria-label="Indicador do gráfico"></div>
-      <div class="periodo" id="periodo" role="group" aria-label="Período">
-        <button type="button" data-dias="30">30 dias</button>
-        <button type="button" data-dias="90" aria-pressed="true">90 dias</button>
+  <!-- ================= HOJE ================= -->
+  <div class="view" id="v-hoje">
+    <header class="andon">
+      <div class="linha1"><span class="marca">Mieruka<i></i></span><span class="data" id="hData"></span></div>
+      <div class="lampadas" id="hLampadas"></div>
+      <div class="detalhe oculto" id="hDetalhe" aria-live="polite"></div>
+      <div class="acao"><div class="rot">Ação do dia</div><p id="hAcao"></p></div>
+      <div class="coach-linha"><span class="apito" aria-hidden="true">C</span><span id="hCoach"></span></div>
+    </header>
+    <div class="miolo">
+      <div class="bloco">
+        <h2>Sua semana</h2>
+        <p class="sub" id="hSemanaSub"></p>
+        <div class="semana" id="hSemana"></div>
+        <div class="legenda"><span class="l1">Corrida feita</span><span class="l2">Outro treino feito</span><span class="l3">Planejado</span><span class="l4">Planejado e não feito</span></div>
       </div>
-      <div class="grafico" id="grafico"></div>
-      <p class="leitura" id="leitura"></p>
-    </section>
+      <div class="bloco">
+        <h2>Indicadores de hoje</h2>
+        <p class="sub">Comparados à sua média de 30 dias. A linha mostra os últimos 14 dias; toque para ver a evolução.</p>
+        <div class="inds" id="hInds"></div>
+      </div>
+    </div>
+  </div>
 
-    <section>
-      <h2>Volume de corrida <small>km por semana</small></h2>
-      <div class="grafico" id="volume"></div>
-      <p class="leitura" id="leituraVolume"></p>
-    </section>
+  <!-- ================= EVOLUÇÃO ================= -->
+  <div class="view oculto" id="v-evolucao">
+    <div class="cabeca"><div class="linha1"><h1>Evolução</h1><span class="meta" id="eMeta"></span></div></div>
+    <div class="filtros"><div class="faixa">
+      <div class="chips" data-grupo="periodo" data-view="e"></div>
+      <div class="datas oculto" id="eDatas"><input type="date" id="eDe" aria-label="De"><span>até</span><input type="date" id="eAte" aria-label="Até"></div>
+      <div class="chips" id="eMetricas"></div>
+    </div></div>
+    <div class="miolo">
+      <div class="bloco">
+        <div class="grafico" id="eGrafico"></div>
+        <p class="leitura" id="eLeitura"></p>
+        <div class="stats" id="eStats"></div>
+      </div>
+      <div class="bloco">
+        <h2>O que mexe na sua prontidão</h2>
+        <p class="sub">Prontidão média da Garmin conforme as horas dormidas na noite anterior, no período escolhido.</p>
+        <div class="barras-h" id="eSono"></div>
+        <p class="leitura" id="eSonoTxt"></p>
+      </div>
+      <div class="bloco">
+        <h2>Seu padrão na semana</h2>
+        <p class="sub" id="eSemanaSub"></p>
+        <div class="barras-h" id="eSemana"></div>
+        <p class="leitura" id="eSemanaTxt"></p>
+      </div>
+    </div>
+  </div>
 
-    <section>
-      <h2>Dicas da semana</h2>
-      <ul class="dicas" id="dicas"></ul>
-    </section>
+  <!-- ================= TREINOS ================= -->
+  <div class="view oculto" id="v-treinos">
+    <div class="cabeca"><div class="linha1"><h1>Treinos</h1><span class="meta" id="tMeta"></span></div></div>
+    <div class="filtros"><div class="faixa">
+      <div class="chips" data-grupo="periodo" data-view="t"></div>
+      <div class="datas oculto" id="tDatas"><input type="date" id="tDe" aria-label="De"><span>até</span><input type="date" id="tAte" aria-label="Até"></div>
+      <div class="chips" id="tTipos"></div>
+    </div></div>
+    <div class="miolo">
+      <div class="bloco">
+        <div class="stats" id="tStats"></div>
+        <p class="leitura" id="tComp"></p>
+      </div>
+      <div class="bloco">
+        <h2 id="tVolTitulo">Volume por semana</h2>
+        <div class="grafico" id="tVolume"></div>
+        <p class="leitura" id="tVolTxt"></p>
+      </div>
+      <div class="bloco" id="tMixBloco">
+        <h2>Leve ou forte?</h2>
+        <p class="sub">Classificação de cada corrida pelo efeito de treino da Garmin. A marca preta é o alvo: 80% leve.</p>
+        <div class="mix" id="tMix"></div>
+        <div class="mix-leg" id="tMixLeg"></div>
+        <p class="leitura" id="tMixTxt"></p>
+      </div>
+      <div class="bloco" id="tEfBloco">
+        <h2>Eficiência aeróbica</h2>
+        <p class="sub">Metros percorridos por batimento cardíaco em cada corrida de 3 km ou mais. Subir é sinal de forma melhor.</p>
+        <div class="grafico" id="tEf"></div>
+        <p class="leitura" id="tEfTxt"></p>
+      </div>
+      <div class="bloco">
+        <h2>Sessões</h2>
+        <div id="tLista"></div>
+      </div>
+    </div>
+  </div>
 
-    <section>
-      <h2>Recordes e previsões</h2>
-      <table>
-        <thead><tr><th>Prova</th><th>Seu recorde</th><th>Previsão hoje</th></tr></thead>
-        <tbody id="recordes"></tbody>
-      </table>
-    </section>
-  </main>
+  <!-- ================= COACH ================= -->
+  <div class="view oculto" id="v-coach">
+    <header class="fase">
+      <div class="linha1" style="display:flex;justify-content:space-between;align-items:baseline"><span class="marca">Coach<i></i></span><span class="data" id="cSemanaData" style="font:500 16px/1 var(--cond);color:var(--cinza-texto)"></span></div>
+      <div class="escada" id="cEscada"></div>
+      <h1 id="cFase"></h1>
+      <div class="semtxt" id="cSemTxt"></div>
+      <blockquote id="cMsg"></blockquote>
+    </header>
+    <div class="miolo">
+      <div class="bloco">
+        <h2>Plano × real desta semana</h2>
+        <div class="aderencia"><span class="v" id="cAder"></span><span class="sub" style="margin:0" id="cAderTxt"></span></div>
+        <table class="quadro"><thead><tr><th>Dia</th><th>Plano</th><th>Real</th><th></th></tr></thead><tbody id="cQuadro"></tbody></table>
+      </div>
+      <div class="bloco">
+        <h2>Meta dos 5K</h2>
+        <div class="regua" id="cRegua"></div>
+        <p class="leitura" id="cMetaTxt"></p>
+      </div>
+      <div class="bloco">
+        <h2>Pontos de atenção</h2>
+        <ul class="dicas" id="cDicas"></ul>
+      </div>
+      <div class="bloco">
+        <h2>Recordes e previsões</h2>
+        <table class="rec"><thead><tr><th>Prova</th><th>Seu recorde</th><th>Previsão hoje</th></tr></thead><tbody id="cRec"></tbody></table>
+      </div>
+    </div>
+  </div>
 
-  <footer>
-    <span id="atualizado"></span>
-    <span class="botoes"><button type="button" id="btnAtualizar">Atualizar</button><button type="button" id="btnBloquear">Bloquear</button></span>
-  </footer>
+  <div class="rodape"><span id="atualizado"></span><span><button type="button" id="btnAtualizar">Atualizar</button> <button type="button" id="btnBloquear">Bloquear</button></span></div>
+
+  <nav class="abas" aria-label="Seções">
+    <button class="aba" data-v="hoje" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/></svg>Hoje</button>
+    <button class="aba" data-v="evolucao"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,14 21,6"/><polyline points="16,6 21,6 21,11"/></svg>Evolução</button>
+    <button class="aba" data-v="treinos"><svg viewBox="0 0 24 24"><rect x="4" y="12" width="3.5" height="8"/><rect x="10.25" y="7" width="3.5" height="13"/><rect x="16.5" y="3" width="3.5" height="17"/></svg>Treinos</button>
+    <button class="aba" data-v="coach"><svg viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>Coach</button>
+  </nav>
 </div>
 
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
 const CHAVE = "mieruka-pin";
-let D = null, metrica = "hrv", dias = 90;
-
+let D = null;
+const estado = {
+  e: {periodo:"90d", de:null, ate:null, metrica:"hrv"},
+  t: {periodo:"6m", de:null, ate:null, tipo:"todos", limite:30},
+};
 const guardar = {
   ler(){ try { return localStorage.getItem(CHAVE); } catch { return null; } },
   gravar(v){ try { localStorage.setItem(CHAVE, v); } catch {} },
   apagar(){ try { localStorage.removeItem(CHAVE); } catch {} }
 };
 
-/* ---------- dados e criptografia ---------- */
+/* ---------- dados ---------- */
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 async function baixar(){
   const r = await fetch("dados.json?t=" + Date.now(), {cache:"no-store"});
   if (!r.ok) throw new Error("sem-dados");
   return r.json();
 }
-async function abrir(pacote, pin){
+async function abrir(p, pin){
   const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pin), "PBKDF2", false, ["deriveKey"]);
-  const chave = await crypto.subtle.deriveKey(
-    {name:"PBKDF2", salt:b64(pacote.sal), iterations:pacote.iter, hash:"SHA-256"},
-    base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
-  const claro = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(pacote.iv)}, chave, b64(pacote.ct));
-  return JSON.parse(new TextDecoder().decode(claro));
+  const k = await crypto.subtle.deriveKey({name:"PBKDF2", salt:b64(p.sal), iterations:p.iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(p.iv)}, k, b64(p.ct))));
 }
 async function carregar(pin, lembrar){
-  let pacote;
-  try { pacote = await baixar(); }
-  catch { throw new Error("O painel ainda não recebeu dados. Rode o briefing no computador e tente de novo em 2 minutos."); }
-  try { D = await abrir(pacote, pin); }
-  catch { throw new Error("PIN incorreto."); }
+  let p;
+  try { p = await baixar(); } catch { throw new Error("O painel ainda não recebeu dados. Rode o briefing no computador e tente de novo em 2 minutos."); }
+  try { D = await abrir(p, pin); } catch { throw new Error("PIN incorreto."); }
   if (lembrar) guardar.gravar(pin);
-  render();
-  $("trava").classList.add("oculto");
-  $("app").classList.remove("oculto");
+  D.atividades = D.atividades || []; D.series = D.series || [];
+  renderTudo();
+  $("trava").classList.add("oculto"); $("app").classList.remove("oculto");
 }
 
 /* ---------- formatação ---------- */
-const nf = (v, c=0) => v == null ? "–" : Number(v).toLocaleString("pt-BR", {minimumFractionDigits:c, maximumFractionDigits:c});
-function tempo(s){
-  if (!s) return "–";
-  s = Math.round(s); const h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60;
-  return h ? `${h}:${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}` : `${m}:${String(x).padStart(2,"0")}`;
-}
-const pace = s => s ? `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,"0")}/km` : "–";
-const dataBR = iso => { const [a,m,d] = iso.split("-"); return `${d}/${m}`; };
+const nf = (v, c=0) => v == null || isNaN(v) ? "–" : Number(v).toLocaleString("pt-BR", {minimumFractionDigits:c, maximumFractionDigits:c});
+function tempo(s){ if (!s) return "–"; s = Math.round(s); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60;
+  return h ? `${h}:${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}` : `${m}:${String(x).padStart(2,"0")}`; }
+const pace = s => s ? `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,"0")}` : "–";
 const MESES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-const mesAno = iso => { const [a,m] = iso.split("-"); return `${MESES[+m-1]}/${a.slice(2)}`; };
+const MESES_L = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const dBR = iso => `${iso.slice(8,10)}/${iso.slice(5,7)}`;
+const mesAno = iso => `${MESES[+iso.slice(5,7)-1]}/${iso.slice(2,4)}`;
+const addDias = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return d.toISOString().slice(0,10); };
+const difDias = (a, b) => Math.round((new Date(b+"T12:00:00") - new Date(a+"T12:00:00")) / 864e5);
+const DIAS_SEM = ["seg","ter","qua","qui","sex","sáb","dom"];
+const dow = iso => (new Date(iso+"T12:00:00").getDay() + 6) % 7;
 
-/* ---------- métricas ---------- */
-const METRICAS = {
-  hrv:       {nome:"HRV", un:"ms", c:0, melhor:"alto"},
-  fc:        {nome:"FC repouso", un:"bpm", c:0, melhor:"baixo"},
-  sono:      {nome:"Sono", un:"h", c:1, melhor:"alto"},
-  prontidao: {nome:"Prontidão", un:"", c:0, melhor:"alto"},
-  vo2:       {nome:"VO2max", un:"", c:1, melhor:"alto"},
-  estresse:  {nome:"Estresse", un:"", c:0, melhor:"baixo"},
+const TIPOS = {
+  running:["Corrida","C"], treadmill_running:["Esteira","C"], track_running:["Pista","C"], trail_running:["Trilha","C"],
+  strength_training:["Força","F"], open_water_swimming:["Natação no mar","N"], lap_swimming:["Natação","N"],
+  walking:["Caminhada","A"], hiking:["Trilha a pé","A"], indoor_cycling:["Bike indoor","B"], cycling:["Bike","B"],
+  e_bike_fitness:["Bike elétrica","B"], hiit:["HIIT","H"], indoor_cardio:["Cardio","H"], elliptical:["Elíptico","H"],
 };
-const HOJE_CAMPO = {hrv:"hrv_noite", fc:"fc_repouso", sono:"sono_horas", prontidao:"readiness_score", vo2:"vo2max", estresse:"estresse"};
-function media30(chave){
-  const lim = new Date(Date.now() - 31*864e5).toISOString().slice(0,10);
-  const v = D.series.filter(s => s.data >= lim && s.data < D.hoje.data && s[chave] != null).map(s => s[chave]);
-  return v.length >= 5 ? v.reduce((a,b)=>a+b,0)/v.length : null;
+const tipoNome = t => (TIPOS[t] || ["Outro"])[0];
+const tipoLetra = t => (TIPOS[t] || [,"•"])[1];
+const ehCorrida = t => /running/.test(t);
+const GRUPO = t => ehCorrida(t) ? "corrida" : t === "strength_training" ? "forca" : /swim/.test(t) ? "natacao" : "outros";
+const EFEITO = {RECOVERY:["Recuperação","leve"], AEROBIC_BASE:["Base aeróbica","leve"], TEMPO:["Tempo","moderado"],
+  LACTATE_THRESHOLD:["Limiar","moderado"], VO2MAX:["VO2max","forte"], ANAEROBIC_CAPACITY:["Anaeróbico","forte"], SPEED:["Velocidade","forte"]};
+
+const METRICAS = {
+  hrv:{nome:"HRV", un:"ms", c:0, melhor:"alto", campo:"hrv_noite"},
+  fc:{nome:"FC repouso", un:"bpm", c:0, melhor:"baixo", campo:"fc_repouso"},
+  sono:{nome:"Sono", un:"h", c:1, melhor:"alto", campo:"sono_horas"},
+  prontidao:{nome:"Prontidão", un:"", c:0, melhor:"alto", campo:"readiness_score"},
+  vo2:{nome:"VO2max", un:"", c:1, melhor:"alto", campo:"vo2max"},
+  estresse:{nome:"Estresse", un:"", c:0, melhor:"baixo", campo:"estresse"},
+};
+
+/* ---------- período ---------- */
+const PERIODOS = [["7d","7 dias",7],["30d","30 dias",30],["90d","90 dias",90],["6m","6 meses",182],["1a","1 ano",365],["datas","Datas",null]];
+function intervalo(v){
+  const st = estado[v], hoje = D.hoje.data;
+  if (st.periodo === "datas" && st.de && st.ate) return [st.de, st.ate];
+  const n = (PERIODOS.find(p => p[0] === st.periodo) || PERIODOS[2])[2] || 90;
+  return [addDias(hoje, -(n-1)), hoje];
+}
+function montarPeriodos(){
+  document.querySelectorAll('.chips[data-grupo=periodo]').forEach(box => {
+    const v = box.dataset.view; box.textContent = "";
+    for (const [k, rot] of PERIODOS){
+      const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = rot;
+      b.setAttribute("aria-pressed", String(estado[v].periodo === k));
+      b.onclick = () => {
+        estado[v].periodo = k;
+        box.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+        const dt = $(v + "Datas");
+        if (k === "datas"){
+          dt.classList.remove("oculto");
+          const [de, ate] = [addDias(D.hoje.data, -89), D.hoje.data];
+          if (!estado[v].de){ estado[v].de = de; estado[v].ate = ate; $(v+"De").value = de; $(v+"Ate").value = ate; }
+        } else dt.classList.add("oculto");
+        v === "e" ? renderEvolucao() : renderTreinos();
+      };
+      box.appendChild(b);
+    }
+  });
+  for (const v of ["e","t"]){
+    const f = () => { estado[v].de = $(v+"De").value; estado[v].ate = $(v+"Ate").value; if (estado[v].de && estado[v].ate) v === "e" ? renderEvolucao() : renderTreinos(); };
+    $(v+"De").onchange = f; $(v+"Ate").onchange = f;
+  }
 }
 
-/* ---------- render ---------- */
-const NOMES_LAMPADA = {recuperacao:"Recuperação", carga:"Carga", performance:"Performance"};
+/* ---------- utilidades de série ---------- */
+const media = a => { const v = a.filter(x => x != null && !isNaN(x)); return v.length ? v.reduce((s,x)=>s+x,0)/v.length : null; };
+function serieEntre(chave, de, ate){ return D.series.filter(s => s.data >= de && s.data <= ate && s[chave] != null).map(s => ({d:s.data, v:s[chave]})); }
+function media30(chave){ const ate = addDias(D.hoje.data, -1); return media(serieEntre(chave, addDias(ate, -29), ate).map(p => p.v)); }
+function movel(pts, janela=7){
+  return pts.map(p => { const ini = addDias(p.d, -(janela-1)); return {d:p.d, v:media(pts.filter(q => q.d >= ini && q.d <= p.d).map(q => q.v))}; });
+}
+
+/* ---------- gráficos SVG ---------- */
+function svgLinha(pts, o={}){
+  const W = o.w || 340, H = o.h || 170, pe = 34, pd = 12, pt = 12, pb = 22;
+  if (pts.length < 2) return "";
+  const vs = pts.map(p => p.v).concat((o.extra||[]).map(p=>p.v)), mn = Math.min(...vs), mx = Math.max(...vs), f = (mx-mn)*0.12 || 1;
+  const y0 = mn - f, y1 = mx + f, t0 = pts[0].d, span = Math.max(difDias(t0, pts.at(-1).d), 1);
+  const X = d => pe + difDias(t0, d) / span * (W - pe - pd), Y = v => pt + (1 - (v - y0)/(y1 - y0)) * (H - pt - pb);
+  const path = a => a.filter(p=>p.v!=null).map((p,i) => `${i?"L":"M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("");
+  const grade = [y0+(y1-y0)*.15, (y0+y1)/2, y1-(y1-y0)*.15];
+  const c = o.casas ?? 0;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.rotulo||"gráfico"}">`;
+  s += grade.map(v => `<line x1="${pe}" x2="${W-pd}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E6E6E6"/><text x="${pe-6}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#58595B" font-family="Barlow">${nf(v,c)}</text>`).join("");
+  if (o.media != null) s += `<line x1="${pe}" x2="${W-pd}" y1="${Y(o.media)}" y2="${Y(o.media)}" stroke="#58595B" stroke-dasharray="4 4"/>`;
+  if (o.pontos !== false) s += pts.map(p => `<circle cx="${X(p.d).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="${o.r||2}" fill="#BDBDBD"/>`).join("");
+  if (o.extra) s += `<path d="${path(o.extra)}" fill="none" stroke="#000" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;
+  else s += `<path d="${path(pts)}" fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round"/>`;
+  const u = (o.extra || pts).filter(p=>p.v!=null).at(-1);
+  if (u) s += `<circle cx="${X(u.d)}" cy="${Y(u.v)}" r="4.5" fill="#EB0A1E"/>`;
+  s += `<text x="${pe}" y="${H-5}" font-size="10.5" fill="#58595B" font-family="Barlow">${dBR(pts[0].d)}</text><text x="${W-pd}" y="${H-5}" font-size="10.5" fill="#58595B" text-anchor="end" font-family="Barlow">${dBR(pts.at(-1).d)}</text></svg>`;
+  return s;
+}
+function sparkline(pts){
+  if (pts.length < 2) return "";
+  const W = 64, H = 28, vs = pts.map(p=>p.v), mn = Math.min(...vs), mx = Math.max(...vs), r = mx - mn || 1;
+  const t0 = pts[0].d, span = Math.max(difDias(t0, pts.at(-1).d), 1);
+  const X = d => 2 + difDias(t0, d)/span*(W-6), Y = v => 3 + (1-(v-mn)/r)*(H-6);
+  const u = pts.at(-1);
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="${pts.map((p,i)=>`${i?"L":"M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("")}" fill="none" stroke="#000" stroke-width="1.6"/><circle cx="${X(u.d)}" cy="${Y(u.v)}" r="2.6" fill="#EB0A1E"/></svg>`;
+}
+function svgBarras(itens, o={}){
+  const W = 340, H = o.h || 150, pe = 28, pt = 10, pb = 22, n = itens.length;
+  if (!n) return "";
+  const mx = Math.max(o.min || 1, ...itens.map(i => i.v)), bw = (W - pe - 2)/n;
+  const Y = v => pt + (1 - v/mx)*(H - pt - pb);
+  const marcas = [0, mx/2, mx];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.rotulo||""}">`;
+  s += marcas.map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E6E6E6"/><text x="${pe-5}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#58595B" font-family="Barlow">${nf(v, mx < 5 ? 1 : 0)}</text>`).join("");
+  itens.forEach((it,i) => { const x = pe + i*bw + Math.min(1.5, bw*.12), y = Y(it.v);
+    s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(bw - Math.min(3, bw*.24), 1).toFixed(1)}" height="${Math.max(H-pb-y,0).toFixed(1)}" fill="${it.cor||"#000"}"><title>${it.t||""}</title></rect>`; });
+  s += `<text x="${pe}" y="${H-5}" font-size="10.5" fill="#58595B" font-family="Barlow">${itens[0].rot||""}</text><text x="${W}" y="${H-5}" font-size="10.5" fill="#58595B" text-anchor="end" font-family="Barlow">${itens.at(-1).rot||""}</text></svg>`;
+  return s;
+}
+function barrasH(alvo, linhas, casas=0){
+  const mx = Math.max(...linhas.map(l => l.v || 0), 1), top = Math.max(...linhas.map(l => l.v || 0));
+  alvo.innerHTML = linhas.map(l => `<div class="bh"><span>${l.rot}</span><span class="trilho"><span class="enche ${l.v===top?"top":""}" style="display:block;width:${(l.v||0)/mx*100}%"></span></span><span class="n">${l.v==null?"–":nf(l.v,casas)}</span></div>`).join("");
+}
+
+/* ---------- semana (plano x real) ---------- */
+function semanaAtual(){
+  const plano = (D.coach && D.coach.plano) || [];
+  return plano.map(p => {
+    const feitos = D.atividades.filter(a => a.data === p.data);
+    const temCorrida = feitos.some(a => ehCorrida(a.tipo)), temForca = feitos.some(a => a.tipo === "strength_training");
+    let st;
+    if (p.data > D.hoje.data) st = "futuro";
+    else if (p.tipo === "descanso") st = feitos.length ? "extra" : "ok";
+    else if ((p.tipo === "corrida" && temCorrida) || (p.tipo === "forca" && temForca)) st = "ok";
+    else if (p.data === D.hoje.data) st = "hoje";
+    else st = feitos.length ? "trocou" : "faltou";
+    return {...p, feitos, st};
+  });
+}
+
+/* ================= RENDER ================= */
+const NOMES_L = {recuperacao:"Recuperação", carga:"Carga", performance:"Performance"};
 const ESTADO = {verde:"No ponto", amarelo:"Atenção", vermelho:"Poupar", cinza:"Calibrando"};
 
-function render(){
-  const h = D.hoje;
-  const dt = new Date(h.data + "T12:00:00");
-  $("data").textContent = dt.toLocaleDateString("pt-BR", {weekday:"long", day:"numeric", month:"long"});
+function renderTudo(){
+  montarPeriodos(); renderHoje(); renderEvolucao(); renderTreinos(); renderCoach();
+  const g = new Date(D.gerado_em);
+  $("atualizado").textContent = `Dados de ${g.toLocaleDateString("pt-BR")} às ${g.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
+}
 
-  // lâmpadas
-  const L = $("lampadas"); L.textContent = "";
+function renderHoje(){
+  const h = D.hoje;
+  $("hData").textContent = new Date(h.data+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"long", day:"numeric", month:"long"});
+  const L = $("hLampadas"); L.textContent = "";
   for (const k of ["recuperacao","carga","performance"]){
     const s = h.semaforos[k] || {cor:"cinza", texto:"sem dado"};
-    const el = document.createElement("div");
-    el.className = "lampada"; el.dataset.cor = s.cor;
-    el.innerHTML = `<button type="button" aria-expanded="false"><div class="luz" aria-hidden="true"></div>
-      <div class="nome"></div><div class="estado"></div></button>`;
-    el.querySelector(".nome").textContent = NOMES_LAMPADA[k];
-    el.querySelector(".estado").textContent = ESTADO[s.cor] || "";
-    el.querySelector("button").addEventListener("click", ev => {
-      const det = $("detalhe"), aberto = !det.classList.contains("oculto") && det.dataset.k === k;
-      L.querySelectorAll("button").forEach(b => b.setAttribute("aria-expanded","false"));
-      if (aberto){ det.classList.add("oculto"); return; }
-      det.dataset.k = k; det.textContent = `${NOMES_LAMPADA[k]}: ${s.texto}`;
-      det.classList.remove("oculto"); ev.currentTarget.setAttribute("aria-expanded","true");
-    });
-    L.appendChild(el);
+    const b = document.createElement("button"); b.type = "button"; b.className = "lampada"; b.dataset.cor = s.cor; b.setAttribute("aria-expanded","false");
+    b.innerHTML = `<div class="luz" aria-hidden="true"></div><div class="nome">${NOMES_L[k]}</div><div class="estado">${ESTADO[s.cor]||""}</div>`;
+    b.onclick = () => { const d = $("hDetalhe"), aberto = !d.classList.contains("oculto") && d.dataset.k === k;
+      L.querySelectorAll(".lampada").forEach(x => x.setAttribute("aria-expanded","false"));
+      if (aberto) return d.classList.add("oculto");
+      d.dataset.k = k; d.textContent = `${NOMES_L[k]}: ${s.texto}`; d.classList.remove("oculto"); b.setAttribute("aria-expanded","true"); };
+    L.appendChild(b);
   }
-  $("detalhe").classList.add("oculto");
-  $("acao").textContent = h.acao;
-  const u = D.ultima_corrida;
-  if (u){
-    const parado = Math.round((new Date(h.data) - new Date(u.data)) / 864e5);
-    $("ultima").textContent = `Última corrida em ${dataBR(u.data)}: ${nf(u.km,1)} km a ${pace(u.pace)}` +
-      (parado > 0 ? `, há ${parado} ${parado === 1 ? "dia" : "dias"}.` : ", hoje.");
-  } else $("ultima").textContent = "Nenhuma corrida nos últimos 200 dias.";
+  $("hAcao").textContent = h.acao;
+  $("hCoach").textContent = D.coach ? D.coach.mensagem : "";
+
+  // semana
+  const sem = semanaAtual(), S = $("hSemana"); S.textContent = "";
+  const planejados = sem.filter(s => s.tipo !== "descanso" && s.data <= h.data), feitos = planejados.filter(s => s.st === "ok");
+  sem.forEach((s,i) => {
+    let cls = "m-livre", txt = "·";
+    if (s.feitos.length){ const c = s.feitos.find(a => ehCorrida(a.tipo)) || s.feitos[0]; cls = "m-feito" + (ehCorrida(c.tipo) ? " corrida" : ""); txt = tipoLetra(c.tipo); }
+    else if (s.tipo !== "descanso"){ cls = s.st === "faltou" ? "m-faltou" : "m-planejado"; txt = s.tipo === "corrida" ? "C" : "F"; }
+    const resumo = s.tipo === "descanso" ? "Folga" : s.titulo.replace("Corrida leve","Leve").replace(" + educativos","");
+    S.insertAdjacentHTML("beforeend", `<div class="dia ${s.data===h.data?"hoje":""}" title="${s.titulo}: ${s.detalhe}"><div class="d">${DIAS_SEM[i]}</div><div class="marca-dia ${cls}">${txt}</div><div class="p">${resumo}</div></div>`);
+  });
+  $("hSemanaSub").textContent = planejados.length
+    ? `${feitos.length} de ${planejados.length} treinos planejados até hoje foram feitos. Fase: ${D.coach.semana.toLowerCase()} da ${D.coach.fase}.`
+    : "Plano da semana começando hoje.";
 
   // indicadores
-  const I = $("indicadores"); I.textContent = "";
+  const I = $("hInds"); I.textContent = "";
   for (const [k, m] of Object.entries(METRICAS)){
-    const v = h.dados[HOJE_CAMPO[k]], base = media30(k);
-    let varTxt = "sem média ainda", cls = "";
-    if (v != null && base != null){
-      const dlt = v - base;
-      varTxt = `${dlt >= 0 ? "+" : "−"}${nf(Math.abs(dlt), m.c)} vs média ${nf(base, m.c)}`;
-      if (Math.abs(dlt) >= (m.c ? 0.3 : 2)) cls = ((dlt > 0) === (m.melhor === "alto")) ? "bom" : "ruim";
-    }
-    I.insertAdjacentHTML("beforeend",
-      `<div class="ind"><div class="rot">${m.nome}</div><div class="val">${nf(v, m.c)}${v != null && m.un ? `<small>${m.un}</small>` : ""}</div><div class="var ${cls}">${varTxt}</div></div>`);
+    const v = h.dados[m.campo], base = media30(k);
+    let txt = "sem média ainda", cls = "";
+    if (v != null && base != null){ const dl = v - base;
+      txt = `${dl>=0?"+":"−"}${nf(Math.abs(dl), m.c)} vs média ${nf(base, m.c)}`;
+      if (Math.abs(dl) >= (m.c ? .3 : 2)) cls = ((dl > 0) === (m.melhor === "alto")) ? "bom" : "ruim"; }
+    const sp = sparkline(serieEntre(k, addDias(h.data, -13), h.data));
+    const b = document.createElement("button"); b.type = "button"; b.className = "ind";
+    b.innerHTML = `<span class="rot">${m.nome}</span><span class="val">${nf(v,m.c)}${v!=null&&m.un?`<small>${m.un}</small>`:""}</span>${sp}<span class="var ${cls}">${txt}</span>`;
+    b.onclick = () => { estado.e.metrica = k; renderEvolucao(); irPara("evolucao"); };
+    I.appendChild(b);
   }
-  // abas
-  const A = $("abas"); A.textContent = "";
-  for (const [k, m] of Object.entries(METRICAS)){
-    const b = document.createElement("button"); b.type = "button"; b.textContent = m.nome; b.dataset.k = k;
-    b.setAttribute("aria-pressed", String(k === metrica));
-    b.addEventListener("click", () => { metrica = k; A.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); grafico(); });
-    A.appendChild(b);
-  }
-  grafico(); volume(); dicas(); recordes();
-  const g = new Date(D.gerado_em);
-  $("atualizado").textContent = `Atualizado em ${g.toLocaleDateString("pt-BR")} às ${g.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
 }
 
-function grafico(){
-  const m = METRICAS[metrica];
-  const lim = new Date(new Date(D.hoje.data).getTime() - dias*864e5).toISOString().slice(0,10);
-  const pts = D.series.filter(s => s.data >= lim && s[metrica] != null).map(s => ({d:s.data, v:s[metrica]}));
-  const G = $("grafico");
-  if (pts.length < 2){ G.innerHTML = `<p class="vazio">Ainda não há dados de ${m.nome} neste período.</p>`; $("leitura").textContent = ""; return; }
-  const W = 340, H = 160, pe = 34, pd = 10, pt = 14, pb = 22;
-  const vs = pts.map(p => p.v), min = Math.min(...vs), max = Math.max(...vs), folga = (max - min) * 0.12 || 1;
-  const y0 = min - folga, y1 = max + folga;
-  const t0 = new Date(pts[0].d).getTime(), t1 = new Date(pts.at(-1).d).getTime() || t0 + 1;
-  const X = d => pe + (new Date(d).getTime() - t0) / Math.max(t1 - t0, 1) * (W - pe - pd);
-  const Y = v => pt + (1 - (v - y0) / (y1 - y0)) * (H - pt - pb);
-  const linha = pts.map((p,i) => `${i ? "L" : "M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("");
-  const med = vs.reduce((a,b)=>a+b,0) / vs.length;
-  const ult = pts.at(-1);
-  const grade = [y0 + (y1-y0)*0.15, (y0+y1)/2, y1 - (y1-y0)*0.15];
-  G.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${m.nome} nos últimos ${dias} dias">
-    ${grade.map(v => `<line x1="${pe}" x2="${W-pd}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E6E6E6"/>
-      <text x="${pe-6}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#58595B" font-family="Barlow">${nf(v, m.c)}</text>`).join("")}
-    <line x1="${pe}" x2="${W-pd}" y1="${Y(med)}" y2="${Y(med)}" stroke="#58595B" stroke-dasharray="4 4"/>
-    <path d="${linha}" fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="${X(ult.d)}" cy="${Y(ult.v)}" r="4.5" fill="#EB0A1E"/>
-    <text x="${pe}" y="${H-5}" font-size="10.5" fill="#58595B" font-family="Barlow">${dataBR(pts[0].d)}</text>
-    <text x="${W-pd}" y="${H-5}" font-size="10.5" fill="#58595B" text-anchor="end" font-family="Barlow">${dataBR(ult.d)}</text>
-  </svg>`;
-  const prim = pts.slice(0, Math.max(3, Math.floor(pts.length/4))).map(p=>p.v);
-  const fim = pts.slice(-Math.max(3, Math.floor(pts.length/4))).map(p=>p.v);
-  const a = prim.reduce((x,y)=>x+y,0)/prim.length, b = fim.reduce((x,y)=>x+y,0)/fim.length;
-  const sobe = b > a, relevante = Math.abs(b - a) >= (m.c ? 0.3 : 2);
-  const juizo = !relevante ? "estável" : ((sobe === (m.melhor === "alto")) ? "melhorando" : "piorando");
-  $("leitura").textContent = `Linha tracejada: média do período (${nf(med, m.c)}${m.un ? " " + m.un : ""}). Tendência ${juizo}: de ${nf(a, m.c)} no início para ${nf(b, m.c)} no fim.`;
+function renderEvolucao(){
+  const st = estado.e, m = METRICAS[st.metrica], [de, ate] = intervalo("e");
+  $("eMeta").textContent = `${dBR(de)} a ${dBR(ate)}`;
+  const M = $("eMetricas"); M.textContent = "";
+  for (const [k, mm] of Object.entries(METRICAS)){
+    const b = document.createElement("button"); b.type = "button"; b.className = "chip vermelho"; b.textContent = mm.nome; b.setAttribute("aria-pressed", String(k === st.metrica));
+    b.onclick = () => { st.metrica = k; renderEvolucao(); }; M.appendChild(b);
+  }
+  const pts = serieEntre(st.metrica, de, ate);
+  if (pts.length < 2){ $("eGrafico").innerHTML = `<p class="vazio">Sem dados de ${m.nome} neste período. Escolha um período maior.</p>`; $("eLeitura").textContent = ""; $("eStats").textContent = ""; }
+  else {
+    const mv = movel(serieEntre(st.metrica, addDias(de, -6), ate), 7).filter(p => p.d >= de);
+    const med = media(pts.map(p => p.v));
+    $("eGrafico").innerHTML = svgLinha(pts, {extra:mv, media:med, casas:m.c, r: pts.length > 120 ? 1.4 : 2.2, rotulo:`${m.nome} de ${dBR(de)} a ${dBR(ate)}`});
+    const n = difDias(de, ate) + 1, ant = serieEntre(st.metrica, addDias(de, -n), addDias(de, -1)).map(p => p.v), mAnt = media(ant);
+    const melhorF = m.melhor === "alto" ? Math.max : Math.min, piorF = m.melhor === "alto" ? Math.min : Math.max;
+    const melhor = pts.find(p => p.v === melhorF(...pts.map(q => q.v))), pior = pts.find(p => p.v === piorF(...pts.map(q => q.v)));
+    let comp = "–", cls = "";
+    if (mAnt != null){ const dl = med - mAnt; comp = `${dl>=0?"+":"−"}${nf(Math.abs(dl), m.c)}`;
+      if (Math.abs(dl) >= (m.c ? .2 : 1)) cls = ((dl > 0) === (m.melhor === "alto")) ? "bom" : "ruim"; }
+    $("eStats").innerHTML = `
+      <div class="stat"><div class="r">Média</div><div class="v">${nf(med, m.c)}</div></div>
+      <div class="stat"><div class="r">Vs período anterior</div><div class="v ${cls}">${comp}</div></div>
+      <div class="stat"><div class="r">Melhor dia</div><div class="v">${nf(melhor.v, m.c)}</div><div class="r">${dBR(melhor.d)}</div></div>
+      <div class="stat"><div class="r">Pior dia</div><div class="v">${nf(pior.v, m.c)}</div><div class="r">${dBR(pior.d)}</div></div>`;
+    const ini = media(mv.slice(0, 7).map(p=>p.v)), fim = media(mv.slice(-7).map(p=>p.v));
+    const rel = Math.abs(fim - ini) >= (m.c ? .3 : 2), melhorou = (fim > ini) === (m.melhor === "alto");
+    $("eLeitura").innerHTML = `Linha preta: média de 7 dias. Tracejado: média do período (${nf(med,m.c)}${m.un?" "+m.un:""}). ` +
+      (rel ? `A tendência está <b>${melhorou ? "melhorando" : "piorando"}</b>: de ${nf(ini,m.c)} para ${nf(fim,m.c)}.` : `A tendência está <b>estável</b> em torno de ${nf(fim,m.c)}.`);
+  }
+
+  // sono x prontidão
+  const dias = D.series.filter(s => s.data >= de && s.data <= ate && s.sono != null && s.prontidao != null);
+  const faixas = [["até 5 h",0,5],["5 a 6 h",5,6],["6 a 7 h",6,7],["7 h ou mais",7,24]];
+  if (dias.length >= 8){
+    const lin = faixas.map(([r,a,b]) => { const x = dias.filter(s => s.sono > a && s.sono <= b || (a===0 && s.sono<=b && s.sono>0)); return {rot:r, v: x.length >= 2 ? media(x.map(s=>s.prontidao)) : null, n:x.length}; });
+    barrasH($("eSono"), lin);
+    const v7 = lin[3].v, menos6 = dias.filter(s => s.sono < 6), v5 = menos6.length >= 3 ? media(menos6.map(s => s.prontidao)) : null;
+    $("eSonoTxt").innerHTML = (v7 != null && v5 != null)
+      ? `Dormindo 7 h ou mais, sua prontidão média foi <b>${nf(v7)}</b>. Com menos de 6 h, <b>${nf(v5)}</b>. ${v7 > v5 ? `São ${nf(v7 - v5)} pontos de diferença, e o treino nem mudou.` : ""}`
+      : "Ainda há poucas noites em alguma faixa para comparar.";
+  } else { $("eSono").innerHTML = `<p class="vazio">Poucas noites neste período. Escolha 90 dias ou mais.</p>`; $("eSonoTxt").textContent = ""; }
+
+  // padrão por dia da semana
+  const met = st.metrica === "sono" ? "estresse" : "sono", mm = METRICAS[met];
+  const porDia = DIAS_SEM.map((d,i) => ({rot:d, v: media(D.series.filter(s => s.data >= de && s.data <= ate && s[met] != null && dow(s.data) === i).map(s => s[met]))}));
+  $("eSemanaSub").textContent = `${mm.nome} médio por dia da semana no período.`;
+  if (porDia.filter(p => p.v != null).length >= 5){
+    barrasH($("eSemana"), porDia, mm.c);
+    const val = porDia.filter(p=>p.v!=null), max = val.reduce((a,b)=>b.v>a.v?b:a), min = val.reduce((a,b)=>b.v<a.v?b:a);
+    $("eSemanaTxt").innerHTML = met === "sono"
+      ? `Você dorme mais na noite de <b>${max.rot}</b> (${nf(max.v,1)} h) e menos na de <b>${min.rot}</b> (${nf(min.v,1)} h). Se o treino forte cair no dia seguinte à pior noite, troque de dia.`
+      : `Seu estresse é maior na <b>${max.rot}</b> (${nf(max.v)}) e menor no <b>${min.rot}</b> (${nf(min.v)}).`;
+  } else { $("eSemana").innerHTML = `<p class="vazio">Sem dados suficientes neste período.</p>`; $("eSemanaTxt").textContent = ""; }
 }
 
-function volume(){
-  const S = D.semanas || [], V = $("volume");
-  if (!S.length){ V.innerHTML = `<p class="vazio">Sem corridas registradas.</p>`; return; }
-  const W = 340, H = 150, pe = 26, pt = 12, pb = 22, n = S.length;
-  const max = Math.max(10, ...S.map(s => s.km)), bw = (W - pe - 4) / n;
-  const Y = v => pt + (1 - v / max) * (H - pt - pb);
-  const marcas = [0, Math.round(max/2), Math.round(max)];
-  let barras = "";
-  S.forEach((s,i) => {
-    const x = pe + i*bw + 1.5, y = Y(s.km), atual = i === n-1;
-    barras += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${(H-pb-y).toFixed(1)}" fill="${atual ? "#EB0A1E" : "#000"}"><title>Semana de ${dataBR(s.semana)}: ${nf(s.km,1)} km, ${s.corridas} corridas</title></rect>`;
+function renderTreinos(){
+  const st = estado.t, [de, ate] = intervalo("t");
+  $("tMeta").textContent = `${dBR(de)} a ${dBR(ate)}`;
+  const tiposChips = [["todos","Todos"],["corrida","Corrida"],["forca","Força"],["natacao","Natação"],["outros","Outros"]];
+  const T = $("tTipos"); T.textContent = "";
+  for (const [k, r] of tiposChips){ const b = document.createElement("button"); b.type="button"; b.className="chip vermelho"; b.textContent=r; b.setAttribute("aria-pressed", String(st.tipo===k));
+    b.onclick = () => { st.tipo = k; st.limite = 30; renderTreinos(); }; T.appendChild(b); }
+  const filtra = (a, b) => D.atividades.filter(x => x.data >= a && x.data <= b && (st.tipo === "todos" || GRUPO(x.tipo) === st.tipo));
+  const lista = filtra(de, ate), corr = lista.filter(a => ehCorrida(a.tipo));
+  const km = corr.reduce((s,a)=>s+a.km,0), horas = lista.reduce((s,a)=>s+a.min,0)/60;
+  const paceMed = corr.length ? corr.reduce((s,a)=>s+a.min*60,0) / Math.max(km, .01) : null;
+  const n = difDias(de, ate) + 1, ant = filtra(addDias(de, -n), addDias(de, -1));
+  const kmAnt = ant.filter(a => ehCorrida(a.tipo)).reduce((s,a)=>s+a.km,0);
+  $("tStats").innerHTML = `
+    <div class="stat"><div class="r">Sessões</div><div class="v">${lista.length}</div></div>
+    <div class="stat"><div class="r">Km corridos</div><div class="v">${nf(km, km < 100 ? 1 : 0)}</div></div>
+    <div class="stat"><div class="r">Horas</div><div class="v">${nf(horas, 1)}</div></div>
+    <div class="stat"><div class="r">Pace médio</div><div class="v">${pace(paceMed)}</div></div>`;
+  $("tComp").innerHTML = `No período anterior de mesmo tamanho: <b>${ant.length}</b> sessões e <b>${nf(kmAnt,1)} km</b> corridos.` +
+    (lista.length && ant.length ? ` ${lista.length >= ant.length ? "Frequência igual ou maior" : "Frequência menor"} que antes.` : "");
+
+  // volume semanal
+  const usaKm = st.tipo === "todos" || st.tipo === "corrida";
+  $("tVolTitulo").textContent = usaKm ? "Km de corrida por semana" : "Horas por semana";
+  const seg0 = addDias(de, -dow(de)), semanas = [];
+  for (let s = seg0; s <= ate; s = addDias(s, 7)){
+    const fim = addDias(s, 6), dentro = lista.filter(a => a.data >= s && a.data <= fim);
+    const v = usaKm ? dentro.filter(a=>ehCorrida(a.tipo)).reduce((x,a)=>x+a.km,0) : dentro.reduce((x,a)=>x+a.min,0)/60;
+    semanas.push({v, rot: semanas.length ? "" : dBR(s), t:`Semana de ${dBR(s)}: ${nf(v,1)} ${usaKm?"km":"h"}, ${dentro.length} sessões`, cor: fim >= D.hoje.data ? "#EB0A1E" : "#000", s});
+  }
+  if (semanas.length){ semanas.at(-1).rot = "esta semana"; $("tVolume").innerHTML = svgBarras(semanas, {min: usaKm ? 10 : 2, rotulo:"volume semanal"});
+    const ult4 = media(semanas.slice(-5,-1).map(s=>s.v)), pico = semanas.reduce((a,b)=>b.v>a.v?b:a);
+    $("tVolTxt").innerHTML = `Média das 4 semanas anteriores: <b>${nf(ult4,1)} ${usaKm?"km":"h"}</b>. Maior semana do período: ${nf(pico.v,1)} (${dBR(pico.s)}).` +
+      (usaKm && ult4 != null ? ` Para crescer com segurança, a próxima semana pode ter até ${nf(Math.max(ult4*1.1, 8),0)} km.` : "");
+  }
+
+  // 80/20
+  const mixC = corr.filter(a => EFEITO[a.efeito]);
+  $("tMixBloco").classList.toggle("oculto", !(st.tipo === "todos" || st.tipo === "corrida"));
+  if (mixC.length >= 3){
+    const cont = {leve:0, moderado:0, forte:0}; mixC.forEach(a => cont[EFEITO[a.efeito][1]]++);
+    const pc = k => cont[k] / mixC.length * 100;
+    $("tMix").innerHTML = `<div style="width:${pc("leve")}%;background:#12A150"></div><div style="width:${pc("moderado")}%;background:#F5B300"></div><div style="width:${pc("forte")}%;background:#EB0A1E"></div><span class="alvo" title="Alvo 80% leve"></span>`;
+    $("tMixLeg").innerHTML = `<span><b>${nf(pc("leve"))}%</b>leve</span><span><b>${nf(pc("moderado"))}%</b>moderado</span><span><b>${nf(pc("forte"))}%</b>forte</span>`;
+    $("tMixTxt").innerHTML = pc("leve") >= 70 ? "Boa distribuição. A maior parte do volume está no ritmo que constrói base sem desgastar."
+      : `Só <b>${nf(pc("leve"))}%</b> das corridas foram leves. O padrão que funciona é o inverso: deixe 1 treino forte por semana e o resto em ritmo de conversa.`;
+  } else { $("tMix").innerHTML = ""; $("tMixLeg").innerHTML = ""; $("tMixTxt").textContent = "Poucas corridas neste período para avaliar a intensidade. Escolha 90 dias ou mais."; }
+
+  // eficiência
+  const ef = corr.filter(a => a.km >= 3 && a.fc && a.fc > 100).map(a => ({d:a.data, v: a.km*1000/a.min / a.fc}));
+  $("tEfBloco").classList.toggle("oculto", !(st.tipo === "todos" || st.tipo === "corrida"));
+  if (ef.length >= 3){
+    const mv = ef.map((p,i) => ({d:p.d, v: media(ef.slice(Math.max(0,i-4), i+1).map(q=>q.v))}));
+    $("tEf").innerHTML = svgLinha(ef, {extra:mv, casas:2, rotulo:"eficiência aeróbica"});
+    const a = media(ef.slice(0, Math.min(5, ef.length)).map(p=>p.v)), b = media(ef.slice(-5).map(p=>p.v)), dl = (b/a - 1)*100;
+    $("tEfTxt").innerHTML = `Linha preta: média das últimas 5 corridas. ${Math.abs(dl) < 2 ? "Eficiência <b>estável</b> no período." : `Eficiência <b>${dl > 0 ? "subiu" : "caiu"} ${nf(Math.abs(dl))}%</b> do início para o fim do período${dl < 0 ? ": é o reflexo de menos volume, e volta com base leve." : "."}`}`;
+  } else { $("tEf").innerHTML = ""; $("tEfTxt").textContent = "Precisa de pelo menos 3 corridas de 3 km ou mais no período."; }
+
+  // lista
+  const L = $("tLista"), ord = [...lista].reverse(), vis = ord.slice(0, st.limite);
+  if (!ord.length){ L.innerHTML = `<p class="vazio">Nenhuma sessão neste filtro. Tente outro período ou tipo.</p>`; return; }
+  let html = "", mesAtual = "";
+  for (const a of vis){
+    const m = a.data.slice(0,7);
+    if (m !== mesAtual){ mesAtual = m; html += `<div class="mes">${MESES_L[+m.slice(5)-1]} de ${m.slice(0,4)}</div>`; }
+    const ef = EFEITO[a.efeito] ? EFEITO[a.efeito][0] : "";
+    const princ = ehCorrida(a.tipo) ? `${nf(a.km, 1)} km` : `${nf(a.min, 0)} min`;
+    const sec = ehCorrida(a.tipo) ? `${pace(a.pace)}/km` : (a.km ? `${nf(a.km,1)} km` : "");
+    html += `<div class="treino"><div class="ic ${ehCorrida(a.tipo)?"corrida":""}">${tipoLetra(a.tipo)}</div>
+      <div><div class="t1">${tipoNome(a.tipo)}${ef ? `, ${ef.toLowerCase()}` : ""}</div><div class="t2">${DIAS_SEM[dow(a.data)]}, ${dBR(a.data)} às ${a.hora}${a.fc ? `, FC ${nf(a.fc)}` : ""}${ehCorrida(a.tipo) ? `, ${nf(a.min,0)} min` : ""}</div></div>
+      <div class="t3">${princ}<small>${sec}</small></div></div>`;
+  }
+  if (ord.length > vis.length) html += `<button class="mais" type="button" id="tMais">Mostrar mais ${Math.min(30, ord.length - vis.length)}</button>`;
+  L.innerHTML = html;
+  const mais = $("tMais"); if (mais) mais.onclick = () => { st.limite += 30; renderTreinos(); };
+}
+
+function renderCoach(){
+  const c = D.coach; if (!c) return;
+  const fases = [["retomada","Retomada","3 semanas leves"],["base","Base","volume com controle"],["desenvolvimento","Desenvolvimento","ritmo e provas"]];
+  const idx = fases.findIndex(f => f[0] === c.fase);
+  $("cEscada").innerHTML = fases.map((f,i) => `<div class="degrau ${i < idx ? "feito" : i === idx ? "agora" : ""}">${f[1]}<small>${f[2]}</small></div>`).join("");
+  $("cFase").textContent = fases[idx][1];
+  $("cSemTxt").textContent = c.semana + (c.dias_sem_correr != null ? `, ${c.dias_sem_correr} dias desde a última corrida` : "");
+  $("cMsg").textContent = c.mensagem;
+  const sem = semanaAtual();
+  $("cSemanaData").textContent = `semana de ${dBR(sem[0].data)}`;
+  const linhas = sem.map((s,i) => {
+    const real = s.feitos.length ? s.feitos.map(a => `${tipoNome(a.tipo)}${ehCorrida(a.tipo) ? ` ${nf(a.km,1)} km` : ` ${nf(a.min,0)} min`}`).join(", ") : (s.data > D.hoje.data ? "" : "nada registrado");
+    const marca = {ok:["✓","ok"], extra:["+","ok"], faltou:["✗","nao"], trocou:["≈","fut"], hoje:["•","nao"], futuro:["–","fut"]}[s.st];
+    return `<tr class="${s.data === D.hoje.data ? "hoje" : ""}"><td class="dd">${DIAS_SEM[i]}<small>${dBR(s.data)}</small></td>
+      <td><div class="tt">${s.titulo}</div><div class="det">${s.detalhe}</div></td><td class="det">${real}</td><td class="st ${marca[1]}" title="${s.st}">${marca[0]}</td></tr>`;
   });
-  V.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Quilômetros por semana nas últimas ${n} semanas">
-    ${marcas.map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E6E6E6"/><text x="${pe-5}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#58595B" font-family="Barlow">${v}</text>`).join("")}
-    ${barras}
-    <text x="${pe}" y="${H-5}" font-size="10.5" fill="#58595B" font-family="Barlow">${mesAno(S[0].semana)}</text>
-    <text x="${W}" y="${H-5}" font-size="10.5" fill="#58595B" text-anchor="end" font-family="Barlow">esta semana</text>
-  </svg>`;
-  const ult4 = S.slice(-4).reduce((a,s)=>a+s.km,0)/4, pico = S.reduce((a,s)=>s.km>a.km?s:a, S[0]);
-  $("leituraVolume").textContent = `Média das últimas 4 semanas: ${nf(ult4,1)} km. Maior semana do período: ${nf(pico.km,1)} km (${dataBR(pico.semana)}). Esta semana: ${nf(S.at(-1).km,1)} km.`;
-}
+  $("cQuadro").innerHTML = linhas.join("");
+  const plan = sem.filter(s => s.tipo !== "descanso" && s.data < D.hoje.data), okc = plan.filter(s => s.st === "ok").length;
+  $("cAder").textContent = plan.length ? `${Math.round(okc/plan.length*100)}%` : "–";
+  $("cAderTxt").textContent = plan.length ? `de aderência ao plano até ontem (${okc} de ${plan.length} treinos).` : "A semana do plano começa agora.";
 
-function dicas(){
-  const U = $("dicas"); U.textContent = "";
-  for (const d of D.dicas || []){
-    const li = document.createElement("li"); li.dataset.n = d.nivel;
-    const h = document.createElement("h3"); h.textContent = d.titulo;
-    const p = document.createElement("p"); p.textContent = d.texto;
-    li.append(h, p); U.appendChild(li);
+  // meta 5K
+  const m = (c.metas || [])[0], R = $("cRegua");
+  if (m){
+    const vals = [m.recorde, m.alvo, m.previsao], lo = Math.min(...vals) - 30, hi = Math.max(...vals) + 30;
+    const P = v => (1 - (v - lo)/(hi - lo)) * 100;   // mais rápido à direita
+    R.innerHTML = `<div class="eixo"></div><div class="trecho" style="left:${P(m.previsao)}%;width:${P(m.alvo)-P(m.previsao)}%"></div>
+      <div class="pt" style="left:${P(m.previsao)}%;background:#58595B"></div><div class="lbl" style="left:${P(m.previsao)}%"><b>${tempo(m.previsao)}</b>hoje</div>
+      <div class="pt" style="left:${P(m.alvo)}%;background:#000"></div><div class="lbl cima" style="left:${P(m.alvo)}%"><b>${tempo(m.alvo)}</b>próximo marco</div>
+      <div class="pt" style="left:${P(m.recorde)}%;background:#EB0A1E"></div><div class="lbl" style="left:${P(m.recorde)}%"><b>${tempo(m.recorde)}</b>recorde</div>`;
+    $("cMetaTxt").innerHTML = `A previsão de hoje é <b>${tempo(m.previsao)}</b>, ${tempo(m.previsao - m.recorde)} acima do seu recorde. ${m.texto} Na retomada, a previsão melhora sozinha à medida que o volume leve volta.`;
   }
+  // dicas
+  $("cDicas").innerHTML = (D.dicas || []).map(d => `<li data-n="${d.nivel}"><h3></h3><p></p></li>`).join("");
+  [...$("cDicas").children].forEach((li,i) => { li.querySelector("h3").textContent = D.dicas[i].titulo; li.querySelector("p").textContent = D.dicas[i].texto; });
+  // recordes
+  const Rc = D.recordes || {}, dd = D.hoje.dados;
+  $("cRec").innerHTML = [["5K","prev_5k"],["10K","prev_10k"],["21K","prev_21k"],["42K","prev_42k"]].map(([k,p]) =>
+    `<tr><td>${k}</td><td class="t">${Rc[k] ? tempo(Rc[k].valor) : "–"}${Rc[k] && Rc[k].data ? `<small>${mesAno(Rc[k].data)}</small>` : ""}</td><td class="t">${tempo(dd[p])}</td></tr>`).join("") +
+    (Rc["Mais longa"] ? `<tr><td>Mais longa</td><td class="t">${nf(Rc["Mais longa"].valor/1000,1)} km<small>${mesAno(Rc["Mais longa"].data)}</small></td><td>–</td></tr>` : "");
 }
 
-function recordes(){
-  const T = $("recordes"), R = D.recordes || {}, dd = D.hoje.dados;
-  const linhas = [["5K","prev_5k"],["10K","prev_10k"],["21K","prev_21k"],["42K","prev_42k"]];
-  T.innerHTML = linhas.map(([k, p]) => {
-    const r = R[k];
-    return `<tr><td>${k}</td><td class="t">${r ? tempo(r.valor) : "–"}${r && r.data ? `<div class="d">${mesAno(r.data)}</div>` : ""}</td><td class="t">${tempo(dd[p])}</td></tr>`;
-  }).join("") + (R["Mais longa"] ? `<tr><td>Mais longa</td><td class="t">${nf(R["Mais longa"].valor/1000,1)} km<div class="d">${mesAno(R["Mais longa"].data)}</div></td><td class="d">–</td></tr>` : "");
+/* ---------- navegação ---------- */
+function irPara(v){
+  document.querySelectorAll(".view").forEach(x => x.classList.toggle("oculto", x.id !== "v-" + v));
+  document.querySelectorAll(".aba").forEach(a => a.dataset.v === v ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
+  window.scrollTo(0, 0);
 }
+document.querySelectorAll(".aba").forEach(a => a.onclick = () => irPara(a.dataset.v));
 
 /* ---------- eventos ---------- */
 $("formPin").addEventListener("submit", async ev => {
   ev.preventDefault(); $("erro").textContent = "Abrindo...";
-  try { await carregar($("pin").value.trim(), $("lembrar").checked); $("erro").textContent = ""; }
-  catch (e) { $("erro").textContent = e.message; }
+  try { await carregar($("pin").value.trim(), $("lembrar").checked); $("erro").textContent = ""; } catch (e) { $("erro").textContent = e.message; }
 });
-$("periodo").addEventListener("click", ev => {
-  const b = ev.target.closest("button"); if (!b) return;
-  dias = +b.dataset.dias;
-  $("periodo").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
-  grafico();
-});
-async function atualizar(){
-  const pin = guardar.ler(); if (!pin || !D) return;
-  try { D = await abrir(await baixar(), pin); render(); } catch {}
-}
-$("btnAtualizar").addEventListener("click", atualizar);
-$("btnBloquear").addEventListener("click", () => {
-  guardar.apagar(); D = null; $("pin").value = "";
-  $("app").classList.add("oculto"); $("trava").classList.remove("oculto");
-});
+async function atualizar(){ const pin = guardar.ler(); if (!pin || !D) return; try { D = await abrir(await baixar(), pin); renderTudo(); } catch {} }
+$("btnAtualizar").onclick = atualizar;
+$("btnBloquear").onclick = () => { guardar.apagar(); D = null; $("pin").value = ""; $("app").classList.add("oculto"); $("trava").classList.remove("oculto"); };
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") atualizar(); });
-
-(async () => {
-  const pin = guardar.ler();
-  if (pin){ try { await carregar(pin, true); } catch (e) { $("erro").textContent = e.message; } }
-})();
+(async () => { const pin = guardar.ler(); if (pin){ try { await carregar(pin, true); } catch (e) { $("erro").textContent = e.message; } } })();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 </script>
 </body>
