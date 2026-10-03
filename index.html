@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Mieruka">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>Mieruka de treinos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vermelho:#EB0A1E; --preto:#000000; --branco:#FFFFFF; --grafite:#58595B;
+  --nevoa:#F2F2F2; --linha:#DCDCDC;
+  --verde:#12A150; --amarelo:#F5B300; --apagado:#6E6E6E;
+  --cond:"Barlow Condensed","Arial Narrow",sans-serif;
+  --texto:"Barlow",system-ui,sans-serif;
+  --gutter:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--branco);color:var(--preto);font:400 16px/1.5 var(--texto);
+  padding-bottom:env(safe-area-inset-bottom)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--vermelho);outline-offset:2px}
+.oculto{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- tela do PIN ---------- */
+#trava{min-height:100vh;min-height:100dvh;background:var(--preto);color:var(--branco);
+  display:flex;flex-direction:column;justify-content:center;padding:32px var(--gutter)}
+#trava .caixa{max-width:340px;width:100%;margin:0 auto}
+#trava .lampadas{display:flex;gap:10px;margin-bottom:28px}
+#trava .lampadas i{width:18px;height:18px;border-radius:50%;background:#2A2A2A}
+#trava .lampadas i:nth-child(3){background:var(--vermelho)}
+#trava h1{font:700 44px/1 var(--cond);letter-spacing:.01em;margin-bottom:8px}
+#trava p{color:#BDBDBD;margin-bottom:28px}
+#trava input[type=password]{width:100%;background:transparent;border:0;border-bottom:2px solid #444;
+  font:600 36px/1.2 var(--cond);letter-spacing:.35em;padding:8px 0;color:var(--branco)}
+#trava input[type=password]:focus{outline:0;border-color:var(--vermelho)}
+#trava label.lembrar{display:flex;gap:10px;align-items:center;margin:18px 0 26px;color:#BDBDBD;font-size:15px}
+#trava label.lembrar input{width:20px;height:20px;accent-color:var(--vermelho)}
+.botao{display:block;width:100%;background:var(--vermelho);color:var(--branco);border:0;border-radius:2px;
+  font:700 20px/1 var(--cond);letter-spacing:.03em;padding:16px;cursor:pointer}
+#erro{color:#FF6B76;margin-top:16px;min-height:1.5em;font-size:15px}
+
+/* ---------- andon (topo) ---------- */
+.andon{background:var(--preto);color:var(--branco);padding:calc(18px + env(safe-area-inset-top)) var(--gutter) 28px}
+.andon .topo{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px}
+.andon .marca{font:700 22px/1 var(--cond);letter-spacing:.02em}
+.andon .marca b{color:var(--vermelho)}
+.andon .data{font:500 17px/1 var(--cond);color:#BDBDBD}
+.lampadas-andon{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#262626;border:2px solid #262626}
+.lampada{background:#0E0E0E;padding:18px 8px 14px;text-align:center}
+.lampada .luz{width:58px;height:58px;border-radius:50%;margin:0 auto 12px;background:#2A2A2A;
+  box-shadow:inset 0 -6px 10px rgba(0,0,0,.35)}
+.lampada[data-cor=verde] .luz{background:var(--verde);box-shadow:0 0 26px rgba(18,161,80,.55),inset 0 -6px 10px rgba(0,0,0,.25)}
+.lampada[data-cor=amarelo] .luz{background:var(--amarelo);box-shadow:0 0 26px rgba(245,179,0,.55),inset 0 -6px 10px rgba(0,0,0,.2)}
+.lampada[data-cor=vermelho] .luz{background:var(--vermelho);box-shadow:0 0 26px rgba(235,10,30,.6),inset 0 -6px 10px rgba(0,0,0,.25)}
+.lampada[data-cor=cinza] .luz{background:#3A3A3A;box-shadow:inset 0 0 0 3px #555}
+.lampada .nome{font:600 18px/1.1 var(--cond)}
+.lampada .estado{font-size:13px;color:#A8A8A8;margin-top:2px}
+.lampada button{all:unset;cursor:pointer;display:block}
+.detalhe-lampada{background:#161616;color:#D8D8D8;font-size:15px;padding:12px 14px;margin-top:2px;line-height:1.45}
+.acao{margin-top:26px;border-left:6px solid var(--vermelho);padding-left:14px}
+.acao h2{font:600 16px/1 var(--cond);color:#BDBDBD;margin-bottom:8px;letter-spacing:.02em}
+.acao p{font:600 26px/1.15 var(--cond);letter-spacing:.005em}
+.acao p.extra{font:400 16px/1.45 var(--texto);color:#D0D0D0;margin-top:10px}
+@media (prefers-reduced-motion:no-preference){
+  .lampada .luz{animation:acende .9s ease-out both}
+  .lampada:nth-child(2) .luz{animation-delay:.18s}
+  .lampada:nth-child(3) .luz{animation-delay:.36s}
+  @keyframes acende{from{filter:brightness(.15);box-shadow:none}to{filter:none}}
+}
+
+/* ---------- corpo ---------- */
+main{max-width:720px;margin:0 auto;padding:0 var(--gutter)}
+section{padding:30px 0 6px;border-bottom:1px solid var(--linha)}
+section:last-of-type{border-bottom:0}
+section>h2{font:700 26px/1.1 var(--cond);margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+section>h2 small{font:500 15px/1 var(--texto);color:var(--grafite)}
+
+.indicadores{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--preto)}
+.ind{padding:12px 0 14px;border-bottom:1px solid var(--linha)}
+.ind:nth-child(odd){padding-right:12px;border-right:1px solid var(--linha)}
+.ind:nth-child(even){padding-left:14px}
+.ind .rot{font-size:14px;color:var(--grafite)}
+.ind .val{font:700 34px/1.05 var(--cond)}
+.ind .val small{font:500 16px/1 var(--cond);color:var(--grafite);margin-left:3px}
+.ind .var{font-size:13px;color:var(--grafite)}
+.ind .var.bom{color:var(--verde)} .ind .var.ruim{color:var(--vermelho)}
+
+.abas{display:flex;gap:0;overflow-x:auto;border:2px solid var(--preto);margin-bottom:12px;scrollbar-width:none}
+.abas button{flex:1 0 auto;background:var(--branco);border:0;border-right:1px solid var(--preto);
+  font:600 16px/1 var(--cond);padding:10px 12px;cursor:pointer;white-space:nowrap}
+.abas button:last-child{border-right:0}
+.abas button[aria-pressed=true]{background:var(--preto);color:var(--branco)}
+.periodo{display:flex;gap:16px;margin:4px 0 6px;font-size:15px}
+.periodo button{background:none;border:0;border-bottom:2px solid transparent;padding:2px 0;cursor:pointer;color:var(--grafite)}
+.periodo button[aria-pressed=true]{color:var(--preto);border-color:var(--vermelho);font-weight:600}
+.grafico svg{display:block;width:100%;height:auto}
+.leitura{font-size:15px;color:var(--grafite);margin:8px 0 10px}
+
+.vazio{color:var(--grafite);font-size:15px;padding:8px 0 18px}
+
+.dicas{list-style:none}
+.dicas li{border-left:6px solid var(--apagado);padding:2px 0 2px 14px;margin-bottom:18px}
+.dicas li[data-n="3"]{border-color:var(--vermelho)}
+.dicas li[data-n="2"]{border-color:var(--amarelo)}
+.dicas li[data-n="0"]{border-color:var(--verde)}
+.dicas h3{font:700 20px/1.15 var(--cond);margin-bottom:4px}
+.dicas p{font-size:15.5px;max-width:62ch}
+
+table{width:100%;border-collapse:collapse;font-size:15.5px}
+th,td{text-align:left;padding:9px 0;border-bottom:1px solid var(--linha);vertical-align:baseline}
+th{font:600 15px/1 var(--texto);color:var(--grafite);border-bottom:2px solid var(--preto)}
+td.t{font:700 22px/1 var(--cond)}
+td.d{color:var(--grafite);font-size:14px}
+
+footer{max-width:720px;margin:0 auto;padding:22px var(--gutter) 36px;display:flex;justify-content:space-between;
+  align-items:center;gap:12px;color:var(--grafite);font-size:14px;flex-wrap:wrap}
+footer .botoes{display:flex;gap:10px}
+footer button{background:none;border:1.5px solid var(--preto);color:var(--preto);border-radius:2px;
+  padding:8px 14px;font:600 15px/1 var(--cond);cursor:pointer}
+@media (min-width:700px){
+  .lampada .luz{width:76px;height:76px}
+  .acao p{font-size:32px}
+  .indicadores{grid-template-columns:repeat(3,1fr)}
+  .ind:nth-child(odd),.ind:nth-child(even){padding:12px 14px 14px;border-right:1px solid var(--linha)}
+  .ind:nth-child(3n){border-right:0}
+}
+</style>
+</head>
+<body>
+
+<div id="trava">
+  <form class="caixa" id="formPin" autocomplete="off">
+    <div class="lampadas" aria-hidden="true"><i></i><i></i><i></i></div>
+    <h1>Mieruka de treinos</h1>
+    <p>Digite o PIN que você criou no computador.</p>
+    <label class="sr" for="pin">PIN</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" required>
+    <label class="lembrar"><input type="checkbox" id="lembrar" checked> Lembrar neste aparelho</label>
+    <button class="botao" type="submit">Abrir painel</button>
+    <div id="erro" role="alert"></div>
+  </form>
+</div>
+
+<div id="app" class="oculto">
+  <header class="andon">
+    <div class="topo"><span class="marca">Mieruka <b>●</b></span><span class="data" id="data"></span></div>
+    <div class="lampadas-andon" id="lampadas"></div>
+    <div id="detalhe" class="detalhe-lampada oculto" aria-live="polite"></div>
+    <div class="acao"><h2>Ação do dia</h2><p id="acao"></p><p class="extra" id="ultima"></p></div>
+  </header>
+
+  <main>
+    <section>
+      <h2>Indicadores de hoje <small>comparados à sua média de 30 dias</small></h2>
+      <div class="indicadores" id="indicadores"></div>
+    </section>
+
+    <section>
+      <h2>Evolução</h2>
+      <div class="abas" id="abas" role="group" aria-label="Indicador do gráfico"></div>
+      <div class="periodo" id="periodo" role="group" aria-label="Período">
+        <button type="button" data-dias="30">30 dias</button>
+        <button type="button" data-dias="90" aria-pressed="true">90 dias</button>
+      </div>
+      <div class="grafico" id="grafico"></div>
+      <p class="leitura" id="leitura"></p>
+    </section>
+
+    <section>
+      <h2>Volume de corrida <small>km por semana</small></h2>
+      <div class="grafico" id="volume"></div>
+      <p class="leitura" id="leituraVolume"></p>
+    </section>
+
+    <section>
+      <h2>Dicas da semana</h2>
+      <ul class="dicas" id="dicas"></ul>
+    </section>
+
+    <section>
+      <h2>Recordes e previsões</h2>
+      <table>
+        <thead><tr><th>Prova</th><th>Seu recorde</th><th>Previsão hoje</th></tr></thead>
+        <tbody id="recordes"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <span id="atualizado"></span>
+    <span class="botoes"><button type="button" id="btnAtualizar">Atualizar</button><button type="button" id="btnBloquear">Bloquear</button></span>
+  </footer>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const CHAVE = "mieruka-pin";
+let D = null, metrica = "hrv", dias = 90;
+
+const guardar = {
+  ler(){ try { return localStorage.getItem(CHAVE); } catch { return null; } },
+  gravar(v){ try { localStorage.setItem(CHAVE, v); } catch {} },
+  apagar(){ try { localStorage.removeItem(CHAVE); } catch {} }
+};
+
+/* ---------- dados e criptografia ---------- */
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function baixar(){
+  const r = await fetch("dados.json?t=" + Date.now(), {cache:"no-store"});
+  if (!r.ok) throw new Error("sem-dados");
+  return r.json();
+}
+async function abrir(pacote, pin){
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pin), "PBKDF2", false, ["deriveKey"]);
+  const chave = await crypto.subtle.deriveKey(
+    {name:"PBKDF2", salt:b64(pacote.sal), iterations:pacote.iter, hash:"SHA-256"},
+    base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+  const claro = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(pacote.iv)}, chave, b64(pacote.ct));
+  return JSON.parse(new TextDecoder().decode(claro));
+}
+async function carregar(pin, lembrar){
+  let pacote;
+  try { pacote = await baixar(); }
+  catch { throw new Error("O painel ainda não recebeu dados. Rode o briefing no computador e tente de novo em 2 minutos."); }
+  try { D = await abrir(pacote, pin); }
+  catch { throw new Error("PIN incorreto."); }
+  if (lembrar) guardar.gravar(pin);
+  render();
+  $("trava").classList.add("oculto");
+  $("app").classList.remove("oculto");
+}
+
+/* ---------- formatação ---------- */
+const nf = (v, c=0) => v == null ? "–" : Number(v).toLocaleString("pt-BR", {minimumFractionDigits:c, maximumFractionDigits:c});
+function tempo(s){
+  if (!s) return "–";
+  s = Math.round(s); const h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60;
+  return h ? `${h}:${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}` : `${m}:${String(x).padStart(2,"0")}`;
+}
+const pace = s => s ? `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,"0")}/km` : "–";
+const dataBR = iso => { const [a,m,d] = iso.split("-"); return `${d}/${m}`; };
+const MESES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const mesAno = iso => { const [a,m] = iso.split("-"); return `${MESES[+m-1]}/${a.slice(2)}`; };
+
+/* ---------- métricas ---------- */
+const METRICAS = {
+  hrv:       {nome:"HRV", un:"ms", c:0, melhor:"alto"},
+  fc:        {nome:"FC repouso", un:"bpm", c:0, melhor:"baixo"},
+  sono:      {nome:"Sono", un:"h", c:1, melhor:"alto"},
+  prontidao: {nome:"Prontidão", un:"", c:0, melhor:"alto"},
+  vo2:       {nome:"VO2max", un:"", c:1, melhor:"alto"},
+  estresse:  {nome:"Estresse", un:"", c:0, melhor:"baixo"},
+};
+const HOJE_CAMPO = {hrv:"hrv_noite", fc:"fc_repouso", sono:"sono_horas", prontidao:"readiness_score", vo2:"vo2max", estresse:"estresse"};
+function media30(chave){
+  const lim = new Date(Date.now() - 31*864e5).toISOString().slice(0,10);
+  const v = D.series.filter(s => s.data >= lim && s.data < D.hoje.data && s[chave] != null).map(s => s[chave]);
+  return v.length >= 5 ? v.reduce((a,b)=>a+b,0)/v.length : null;
+}
+
+/* ---------- render ---------- */
+const NOMES_LAMPADA = {recuperacao:"Recuperação", carga:"Carga", performance:"Performance"};
+const ESTADO = {verde:"No ponto", amarelo:"Atenção", vermelho:"Poupar", cinza:"Calibrando"};
+
+function render(){
+  const h = D.hoje;
+  const dt = new Date(h.data + "T12:00:00");
+  $("data").textContent = dt.toLocaleDateString("pt-BR", {weekday:"long", day:"numeric", month:"long"});
+
+  // lâmpadas
+  const L = $("lampadas"); L.textContent = "";
+  for (const k of ["recuperacao","carga","performance"]){
+    const s = h.semaforos[k] || {cor:"cinza", texto:"sem dado"};
+    const el = document.createElement("div");
+    el.className = "lampada"; el.dataset.cor = s.cor;
+    el.innerHTML = `<button type="button" aria-expanded="false"><div class="luz" aria-hidden="true"></div>
+      <div class="nome"></div><div class="estado"></div></button>`;
+    el.querySelector(".nome").textContent = NOMES_LAMPADA[k];
+    el.querySelector(".estado").textContent = ESTADO[s.cor] || "";
+    el.querySelector("button").addEventListener("click", ev => {
+      const det = $("detalhe"), aberto = !det.classList.contains("oculto") && det.dataset.k === k;
+      L.querySelectorAll("button").forEach(b => b.setAttribute("aria-expanded","false"));
+      if (aberto){ det.classList.add("oculto"); return; }
+      det.dataset.k = k; det.textContent = `${NOMES_LAMPADA[k]}: ${s.texto}`;
+      det.classList.remove("oculto"); ev.currentTarget.setAttribute("aria-expanded","true");
+    });
+    L.appendChild(el);
+  }
+  $("detalhe").classList.add("oculto");
+  $("acao").textContent = h.acao;
+  const u = D.ultima_corrida;
+  if (u){
+    const parado = Math.round((new Date(h.data) - new Date(u.data)) / 864e5);
+    $("ultima").textContent = `Última corrida em ${dataBR(u.data)}: ${nf(u.km,1)} km a ${pace(u.pace)}` +
+      (parado > 0 ? `, há ${parado} ${parado === 1 ? "dia" : "dias"}.` : ", hoje.");
+  } else $("ultima").textContent = "Nenhuma corrida nos últimos 200 dias.";
+
+  // indicadores
+  const I = $("indicadores"); I.textContent = "";
+  for (const [k, m] of Object.entries(METRICAS)){
+    const v = h.dados[HOJE_CAMPO[k]], base = media30(k);
+    let varTxt = "sem média ainda", cls = "";
+    if (v != null && base != null){
+      const dlt = v - base;
+      varTxt = `${dlt >= 0 ? "+" : "−"}${nf(Math.abs(dlt), m.c)} vs média ${nf(base, m.c)}`;
+      if (Math.abs(dlt) >= (m.c ? 0.3 : 2)) cls = ((dlt > 0) === (m.melhor === "alto")) ? "bom" : "ruim";
+    }
+    I.insertAdjacentHTML("beforeend",
+      `<div class="ind"><div class="rot">${m.nome}</div><div class="val">${nf(v, m.c)}${v != null && m.un ? `<small>${m.un}</small>` : ""}</div><div class="var ${cls}">${varTxt}</div></div>`);
+  }
+  // abas
+  const A = $("abas"); A.textContent = "";
+  for (const [k, m] of Object.entries(METRICAS)){
+    const b = document.createElement("button"); b.type = "button"; b.textContent = m.nome; b.dataset.k = k;
+    b.setAttribute("aria-pressed", String(k === metrica));
+    b.addEventListener("click", () => { metrica = k; A.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); grafico(); });
+    A.appendChild(b);
+  }
+  grafico(); volume(); dicas(); recordes();
+  const g = new Date(D.gerado_em);
+  $("atualizado").textContent = `Atualizado em ${g.toLocaleDateString("pt-BR")} às ${g.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
+}
+
+function grafico(){
+  const m = METRICAS[metrica];
+  const lim = new Date(new Date(D.hoje.data).getTime() - dias*864e5).toISOString().slice(0,10);
+  const pts = D.series.filter(s => s.data >= lim && s[metrica] != null).map(s => ({d:s.data, v:s[metrica]}));
+  const G = $("grafico");
+  if (pts.length < 2){ G.innerHTML = `<p class="vazio">Ainda não há dados de ${m.nome} neste período.</p>`; $("leitura").textContent = ""; return; }
+  const W = 340, H = 160, pe = 34, pd = 10, pt = 14, pb = 22;
+  const vs = pts.map(p => p.v), min = Math.min(...vs), max = Math.max(...vs), folga = (max - min) * 0.12 || 1;
+  const y0 = min - folga, y1 = max + folga;
+  const t0 = new Date(pts[0].d).getTime(), t1 = new Date(pts.at(-1).d).getTime() || t0 + 1;
+  const X = d => pe + (new Date(d).getTime() - t0) / Math.max(t1 - t0, 1) * (W - pe - pd);
+  const Y = v => pt + (1 - (v - y0) / (y1 - y0)) * (H - pt - pb);
+  const linha = pts.map((p,i) => `${i ? "L" : "M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("");
+  const med = vs.reduce((a,b)=>a+b,0) / vs.length;
+  const ult = pts.at(-1);
+  const grade = [y0 + (y1-y0)*0.15, (y0+y1)/2, y1 - (y1-y0)*0.15];
+  G.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${m.nome} nos últimos ${dias} dias">
+    ${grade.map(v => `<line x1="${pe}" x2="${W-pd}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E6E6E6"/>
+      <text x="${pe-6}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#58595B" font-family="Barlow">${nf(v, m.c)}</text>`).join("")}
+    <line x1="${pe}" x2="${W-pd}" y1="${Y(med)}" y2="${Y(med)}" stroke="#58595B" stroke-dasharray="4 4"/>
+    <path d="${linha}" fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${X(ult.d)}" cy="${Y(ult.v)}" r="4.5" fill="#EB0A1E"/>
+    <text x="${pe}" y="${H-5}" font-size="10.5" fill="#58595B" font-family="Barlow">${dataBR(pts[0].d)}</text>
+    <text x="${W-pd}" y="${H-5}" font-size="10.5" fill="#58595B" text-anchor="end" font-family="Barlow">${dataBR(ult.d)}</text>
+  </svg>`;
+  const prim = pts.slice(0, Math.max(3, Math.floor(pts.length/4))).map(p=>p.v);
+  const fim = pts.slice(-Math.max(3, Math.floor(pts.length/4))).map(p=>p.v);
+  const a = prim.reduce((x,y)=>x+y,0)/prim.length, b = fim.reduce((x,y)=>x+y,0)/fim.length;
+  const sobe = b > a, relevante = Math.abs(b - a) >= (m.c ? 0.3 : 2);
+  const juizo = !relevante ? "estável" : ((sobe === (m.melhor === "alto")) ? "melhorando" : "piorando");
+  $("leitura").textContent = `Linha tracejada: média do período (${nf(med, m.c)}${m.un ? " " + m.un : ""}). Tendência ${juizo}: de ${nf(a, m.c)} no início para ${nf(b, m.c)} no fim.`;
+}
+
+function volume(){
+  const S = D.semanas || [], V = $("volume");
+  if (!S.length){ V.innerHTML = `<p class="vazio">Sem corridas registradas.</p>`; return; }
+  const W = 340, H = 150, pe = 26, pt = 12, pb = 22, n = S.length;
+  const max = Math.max(10, ...S.map(s => s.km)), bw = (W - pe - 4) / n;
+  const Y = v => pt + (1 - v / max) * (H - pt - pb);
+  const marcas = [0, Math.round(max/2), Math.round(max)];
+  let barras = "";
+  S.forEach((s,i) => {
+    const x = pe + i*bw + 1.5, y = Y(s.km), atual = i === n-1;
+    barras += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${(H-pb-y).toFixed(1)}" fill="${atual ? "#EB0A1E" : "#000"}"><title>Semana de ${dataBR(s.semana)}: ${nf(s.km,1)} km, ${s.corridas} corridas</title></rect>`;
+  });
+  V.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Quilômetros por semana nas últimas ${n} semanas">
+    ${marcas.map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E6E6E6"/><text x="${pe-5}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#58595B" font-family="Barlow">${v}</text>`).join("")}
+    ${barras}
+    <text x="${pe}" y="${H-5}" font-size="10.5" fill="#58595B" font-family="Barlow">${mesAno(S[0].semana)}</text>
+    <text x="${W}" y="${H-5}" font-size="10.5" fill="#58595B" text-anchor="end" font-family="Barlow">esta semana</text>
+  </svg>`;
+  const ult4 = S.slice(-4).reduce((a,s)=>a+s.km,0)/4, pico = S.reduce((a,s)=>s.km>a.km?s:a, S[0]);
+  $("leituraVolume").textContent = `Média das últimas 4 semanas: ${nf(ult4,1)} km. Maior semana do período: ${nf(pico.km,1)} km (${dataBR(pico.semana)}). Esta semana: ${nf(S.at(-1).km,1)} km.`;
+}
+
+function dicas(){
+  const U = $("dicas"); U.textContent = "";
+  for (const d of D.dicas || []){
+    const li = document.createElement("li"); li.dataset.n = d.nivel;
+    const h = document.createElement("h3"); h.textContent = d.titulo;
+    const p = document.createElement("p"); p.textContent = d.texto;
+    li.append(h, p); U.appendChild(li);
+  }
+}
+
+function recordes(){
+  const T = $("recordes"), R = D.recordes || {}, dd = D.hoje.dados;
+  const linhas = [["5K","prev_5k"],["10K","prev_10k"],["21K","prev_21k"],["42K","prev_42k"]];
+  T.innerHTML = linhas.map(([k, p]) => {
+    const r = R[k];
+    return `<tr><td>${k}</td><td class="t">${r ? tempo(r.valor) : "–"}${r && r.data ? `<div class="d">${mesAno(r.data)}</div>` : ""}</td><td class="t">${tempo(dd[p])}</td></tr>`;
+  }).join("") + (R["Mais longa"] ? `<tr><td>Mais longa</td><td class="t">${nf(R["Mais longa"].valor/1000,1)} km<div class="d">${mesAno(R["Mais longa"].data)}</div></td><td class="d">–</td></tr>` : "");
+}
+
+/* ---------- eventos ---------- */
+$("formPin").addEventListener("submit", async ev => {
+  ev.preventDefault(); $("erro").textContent = "Abrindo...";
+  try { await carregar($("pin").value.trim(), $("lembrar").checked); $("erro").textContent = ""; }
+  catch (e) { $("erro").textContent = e.message; }
+});
+$("periodo").addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  dias = +b.dataset.dias;
+  $("periodo").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  grafico();
+});
+async function atualizar(){
+  const pin = guardar.ler(); if (!pin || !D) return;
+  try { D = await abrir(await baixar(), pin); render(); } catch {}
+}
+$("btnAtualizar").addEventListener("click", atualizar);
+$("btnBloquear").addEventListener("click", () => {
+  guardar.apagar(); D = null; $("pin").value = "";
+  $("app").classList.add("oculto"); $("trava").classList.remove("oculto");
+});
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") atualizar(); });
+
+(async () => {
+  const pin = guardar.ler();
+  if (pin){ try { await carregar(pin, true); } catch (e) { $("erro").textContent = e.message; } }
+})();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>
