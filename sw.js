@@ -1,5 +1,5 @@
 // Guarda o painel para abrir rápido e funcionar sem internet com o último dado baixado.
-const CACHE = "mieruka-v2";
+const CACHE = "mieruka-v3";
 const BASE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
