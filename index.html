@@ -81,7 +81,11 @@ button,input{font:inherit;color:inherit}
 @media (prefers-reduced-motion:no-preference){.novo{animation:entra .4s ease-out}@keyframes entra{from{opacity:0;transform:translateY(-10px)}}}
 
 /* ---------- hoje: gauge ---------- */
-.hero{padding:18px var(--g) 16px;text-align:center}
+.hero{position:relative;padding:18px var(--g) 16px;text-align:center;overflow:hidden}
+.hero::before{content:"";position:absolute;left:-10%;right:-10%;top:-30%;height:260px;
+  background:radial-gradient(circle at 50% 30%, var(--glow-cor, var(--fraco)), transparent 70%);
+  opacity:.16;pointer-events:none}
+.hero > *{position:relative}
 .gauge{position:relative;width:230px;margin:0 auto}
 .gauge svg{display:block;width:100%;height:auto}
 .gauge .valor{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%)}
@@ -217,6 +221,7 @@ button,input{font:inherit;color:inherit}
 .degrau.agora{background:var(--texto);color:#000}
 .fase-n{font:800 44px/.95 var(--cond)}
 .fase-s{color:var(--apagado);font:500 16px/1.2 var(--cond);margin-top:4px}
+.fase-s + .selo{display:inline-block;margin-top:10px;color:var(--amarelo)}
 blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid var(--vermelho);padding-left:12px}
 .regua{position:relative;height:84px;margin:6px 26px 0}
 .regua .eixo{position:absolute;left:-26px;right:-26px;top:40px;height:4px;border-radius:2px;background:var(--painel2)}
@@ -400,10 +405,16 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
     <div class="escada" id="cEscada"></div>
     <div class="fase-n" id="cFase"></div>
     <div class="fase-s" id="cFaseS"></div>
+    <span class="selo oculto" id="cRecarga">Semana de recuperação</span>
     <blockquote id="cMsg"></blockquote>
   </div>
+  <div class="painel oculto" id="cLongaoP">
+    <h2>Progressão do longão <small id="cLongaoSub"></small></h2>
+    <div class="barra"><i id="cLongaoBarra"></i></div>
+    <p class="leitura" id="cLongaoTxt"></p>
+  </div>
   <div class="painel">
-    <h2>Meta dos 5K</h2>
+    <h2 id="cMetaTitulo">Meta de prova</h2>
     <div class="regua" id="cRegua"></div>
     <p class="leitura" id="cMetaTxt"></p>
   </div>
@@ -612,6 +623,7 @@ function renderHoje(){
   $("hData").textContent = dt.toLocaleDateString("pt-BR",{day:"numeric", month:"long"});
   const pr = dd.readiness_score, est = pr == null ? "Sem dado" : pr >= 70 ? "Pronto para treinar" : pr >= 45 ? "Treine com moderação" : "Dia de recuperar";
   $("hGauge").innerHTML = gaugeSVG(pr) + `<div class="valor"><b class="n">${pr == null ? "–" : nf(pr)}</b><span>prontidão</span></div><div class="estado">${est}</div>`;
+  document.querySelector(".hero").style.setProperty("--glow-cor", pr == null ? "#55555A" : pr >= 70 ? "#2FBF71" : pr >= 45 ? "#F5C400" : "#FF5A66");
   const L = $("hLampadas"); L.textContent = "";
   for (const k of ["recuperacao","carga","performance"]){
     const s = h.semaforos[k] || {cor:"cinza", texto:"sem dado"};
@@ -872,13 +884,25 @@ function renderAtividades(){
 /* ---------- COACH ---------- */
 function renderCoach(){
   const c = D.coach; if (!c.fase) return;
-  const fases = [["retomada","Retomada","3 semanas leves"],["base","Base","volume com controle"],["desenvolvimento","Desenvolvimento","ritmo e provas"]], idx = fases.findIndex(f => f[0] === c.fase);
+  const fases = [["retomada","Retomada","3 semanas leves"],["base","Base","volume com controle"],["desenvolvimento","Desenvolvimento",`rumo ao ${c.objetivo||"10K"}`]], idx = fases.findIndex(f => f[0] === c.fase);
   $("cEscada").innerHTML = fases.map((f,i) => `<div class="degrau ${i < idx ? "feito" : i === idx ? "agora" : ""}">${f[1]}<small>${f[2]}</small></div>`).join("");
   $("cFase").textContent = fases[idx][1];
   $("cFaseS").textContent = c.semana + (c.dias_sem_correr != null && c.dias_sem_correr > 3 ? `, ${c.dias_sem_correr} dias desde a última corrida` : "");
+  $("cRecarga").classList.toggle("oculto", !c.deload);
   $("cSemana").textContent = `${nf(c.km_medio_4sem,1)} km/semana (média 4 sem.)`;
   $("cMsg").textContent = c.mensagem;
+  const temLongao = c.longao_teto != null;
+  $("cLongaoP").classList.toggle("oculto", !temLongao);
+  if (temLongao){
+    const pct = Math.max(4, Math.min(100, c.longao_atual / c.longao_teto * 100));
+    $("cLongaoBarra").style.width = pct + "%";
+    $("cLongaoSub").textContent = `teto da fase: ${nf(c.longao_teto,1)} km`;
+    $("cLongaoTxt").innerHTML = pct >= 100
+      ? `Seu longão já chegou ao teto de <b>${nf(c.longao_teto,1)} km</b> para o ${c.objetivo}: agora é manter, com uma semana de recarga a cada 4.`
+      : `Hoje o longão de referência é <b>${nf(c.longao_atual,1)} km</b>, a caminho dos <b>${nf(c.longao_teto,1)} km</b> do ${c.objetivo}.`;
+  }
   const m = (c.metas || [])[0], R = $("cRegua");
+  $("cMetaTitulo").textContent = m ? `Meta do ${m.prova}` : "Meta de prova";
   if (m){ const vs = [m.recorde, m.alvo, m.previsao], lo = Math.min(...vs) - 30, hi = Math.max(...vs) + 30, P = v => (1 - (v-lo)/(hi-lo))*100;
     R.innerHTML = `<div class="eixo"></div><div class="trecho" style="left:${P(m.previsao)}%;width:${P(m.alvo)-P(m.previsao)}%"></div>
       <div class="pt" style="left:${P(m.previsao)}%;background:#8A8A90"></div><div class="lbl" style="left:${P(m.previsao)}%"><b>${tempo(m.previsao)}</b>hoje</div>
