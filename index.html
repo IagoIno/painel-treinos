@@ -3,30 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#F2F2F7">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Mieruka">
 <meta name="robots" content="noindex">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
 <title>Mieruka</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --fundo:#000000; --painel:#1C1C1E; --painel2:#2A2A2D; --linha:#38383C;
-  --texto:#F4F4F5; --apagado:#9A9AA0; --fraco:#6B6B70;
-  --vermelho:#EB0A1E; --azul:#3D8BFF; --laranja:#FF8A1F; --verde:#2FBF71; --amarelo:#F5C400; --roxo:#A57BFF;
+  --fundo:#F2F2F7; --painel:#FFFFFF; --painel2:#EFEFF4; --linha:#E5E5EA;
+  --texto:#1C1C1E; --apagado:#6E6E73; --fraco:#8E8E93; --ruim:#FF3B30;
+  --vermelho:#FF375F; --azul:#007AFF; --laranja:#FF9500; --verde:#34C759; --amarelo:#FFCC00; --roxo:#AF52DE;
   /* zonas de intensidade */
-  --z0:#5A5A60; --z1:#8A96A6; --z2:#3D8BFF; --z3:#2FBF71; --z4:#F5C400; --z5:#FF8A1F; --z6:#EB0A1E;
-  --cond:"Saira Condensed","Arial Narrow",sans-serif; --corpo:"Saira",system-ui,sans-serif;
-  --g:14px; --nav:62px; --raio:14px;
+  --z0:#C7C7CC; --z1:#64D2FF; --z2:#007AFF; --z3:#34C759; --z4:#FFCC00; --z5:#FF9500; --z6:#FF375F;
+  --cond:ui-rounded,-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Segoe UI",Roboto,sans-serif;
+  --corpo:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --g:14px; --nav:62px; --raio:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;background:var(--fundo)}
+html{-webkit-text-size-adjust:100%;background:var(--fundo);color-scheme:light}
 body{background:var(--fundo);color:var(--texto);font:400 15px/1.5 var(--corpo);-webkit-font-smoothing:antialiased}
 button,input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--vermelho);outline-offset:2px}
@@ -48,19 +46,19 @@ button,input{font:inherit;color:inherit}
 .lembrar{display:flex;gap:10px;align-items:center;margin:16px 0 22px;color:var(--apagado);font-size:14px}
 .lembrar input{width:18px;height:18px;accent-color:var(--vermelho)}
 .botao{display:block;width:100%;background:var(--vermelho);color:#fff;border:0;border-radius:10px;font:700 20px/1 var(--cond);padding:16px;cursor:pointer}
-#erro{color:#FF6B76;margin-top:14px;min-height:1.5em;font-size:14px}
+#erro{color:#D70015;margin-top:14px;min-height:1.5em;font-size:14px}
 
 /* ---------- estrutura ---------- */
 #app{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 10px)}
 .tela{max-width:640px;margin:0 auto;padding:0 10px}
 .topo{padding:calc(12px + env(safe-area-inset-top)) 6px 12px;display:flex;justify-content:space-between;align-items:flex-end}
-.topo h1{font:800 32px/1 var(--cond)}
+.topo h1{font:800 32px/1 var(--cond);overflow-wrap:break-word}
 .topo .sub{color:var(--apagado);font:500 15px/1.2 var(--cond);text-align:right}
 .painel{background:var(--painel);border-radius:var(--raio);padding:16px var(--g);margin-bottom:10px}
 .painel h2{font:700 21px/1.1 var(--cond);display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
 .painel h2 small{font:500 13.5px/1.2 var(--corpo);color:var(--apagado)}
 .texto-apagado{color:var(--apagado);font-size:14px;line-height:1.45}
-.leitura{font-size:14px;line-height:1.5;color:#D6D6DA;margin-top:10px}
+.leitura{font-size:14px;line-height:1.5;color:#3A3A3C;margin-top:10px}
 .leitura b{color:var(--texto);font-weight:600}
 .vazio{color:var(--apagado);font-size:14px;padding:4px 0}
 .botao-link{background:none;border:0;color:var(--vermelho);font:700 15.5px/1 var(--cond);padding:12px 0 0;cursor:pointer}
@@ -69,9 +67,9 @@ button,input{font:inherit;color:inherit}
 .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 10px}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;background:var(--painel);color:var(--apagado);border:0;border-radius:999px;font:600 15px/1 var(--cond);padding:9px 14px;cursor:pointer;white-space:nowrap}
-.chip[aria-pressed=true]{background:var(--texto);color:#000}
+.chip[aria-pressed=true]{background:var(--texto);color:#fff}
 .datas{display:flex;gap:8px;align-items:center;color:var(--apagado);font-size:13px;padding:0 2px 10px}
-.datas input{background:var(--painel);border:1px solid var(--linha);border-radius:8px;color:var(--texto);padding:7px 8px;font-size:14px;color-scheme:dark;flex:1;min-width:0}
+.datas input{background:var(--painel);border:1px solid var(--linha);border-radius:8px;color:var(--texto);padding:7px 8px;font-size:14px;color-scheme:light;flex:1;min-width:0}
 
 /* ---------- aviso ---------- */
 .novo{background:var(--vermelho);color:#fff;border-radius:var(--raio);padding:12px 14px;margin:0 0 10px;display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
@@ -81,11 +79,7 @@ button,input{font:inherit;color:inherit}
 @media (prefers-reduced-motion:no-preference){.novo{animation:entra .4s ease-out}@keyframes entra{from{opacity:0;transform:translateY(-10px)}}}
 
 /* ---------- hoje: gauge ---------- */
-.hero{position:relative;padding:18px var(--g) 16px;text-align:center;overflow:hidden}
-.hero::before{content:"";position:absolute;left:-10%;right:-10%;top:-30%;height:260px;
-  background:radial-gradient(circle at 50% 30%, var(--glow-cor, var(--fraco)), transparent 70%);
-  opacity:.16;pointer-events:none}
-.hero > *{position:relative}
+.hero{padding:18px var(--g) 16px;text-align:center}
 .gauge{position:relative;width:230px;margin:0 auto}
 .gauge svg{display:block;width:100%;height:auto}
 .gauge .valor{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%)}
@@ -93,15 +87,15 @@ button,input{font:inherit;color:inherit}
 .gauge .valor span{font:600 16px/1 var(--cond);color:var(--apagado)}
 .gauge .estado{font:700 20px/1 var(--cond);margin-top:-6px}
 .lampadas{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:16px}
-.lampada{background:var(--painel2);border:0;border-radius:10px;padding:10px 6px 9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px}
-.lampada i{width:14px;height:14px;border-radius:50%;background:var(--z0)}
-.lampada[data-cor=verde] i{background:var(--verde);box-shadow:0 0 12px var(--verde)}
-.lampada[data-cor=amarelo] i{background:var(--amarelo);box-shadow:0 0 12px var(--amarelo)}
-.lampada[data-cor=vermelho] i{background:var(--vermelho);box-shadow:0 0 12px var(--vermelho)}
+.lampada{background:var(--painel2);border:0;border-radius:12px;padding:10px 6px 9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px}
+.lampada i{width:12px;height:12px;border-radius:50%;background:var(--z0)}
+.lampada[data-cor=verde]{background:#E6F8EB} .lampada[data-cor=verde] i{background:var(--verde)}
+.lampada[data-cor=amarelo]{background:#FFF6D9} .lampada[data-cor=amarelo] i{background:var(--amarelo)}
+.lampada[data-cor=vermelho]{background:#FFE3EA} .lampada[data-cor=vermelho] i{background:var(--vermelho)}
 .lampada b{font:600 15px/1 var(--cond)}
 .lampada span{font-size:12px;color:var(--apagado);line-height:1}
 .lampada[aria-expanded=true]{outline:1.5px solid var(--texto)}
-.detalhe{background:var(--painel2);border-radius:10px;padding:10px 12px;margin-top:6px;font-size:13.5px;color:#D6D6DA;text-align:left}
+.detalhe{background:var(--painel2);border-radius:10px;padding:10px 12px;margin-top:6px;font-size:13.5px;color:#3A3A3C;text-align:left}
 .acao{margin-top:14px;text-align:left;border-left:4px solid var(--vermelho);padding-left:12px}
 .acao small{font:600 14px/1 var(--cond);color:var(--apagado)}
 .acao p{font:700 20px/1.2 var(--cond);margin-top:4px}
@@ -111,7 +105,7 @@ button,input{font:inherit;color:inherit}
 .perfil span{display:block;border-radius:3px 3px 0 0;min-width:3px}
 .zonas-leg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--apagado);margin-top:6px}
 .zonas-leg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;background:var(--c)}
-.treino h3{font:800 28px/1 var(--cond)}
+.treino h3{font:800 26px/1.1 var(--cond);overflow-wrap:break-word}
 .treino .foco{color:var(--apagado);font-size:14px;margin:4px 0 8px}
 .totais{display:flex;gap:18px;margin:10px 0 2px}
 .totais div{font-size:12.5px;color:var(--apagado)}
@@ -132,7 +126,7 @@ button,input{font:inherit;color:inherit}
 .vital .v small{font:500 14px/1 var(--cond);color:var(--apagado);margin-left:3px}
 .vital svg{width:58px;height:26px}
 .vital .d{grid-column:1/-1;font-size:12px;color:var(--apagado)}
-.bom{color:var(--verde)!important} .ruim{color:#FF5A66!important}
+.bom{color:var(--verde)!important} .ruim{color:#FF3B30!important}
 
 /* semana */
 .barra{height:10px;border-radius:5px;background:var(--painel2);overflow:hidden;margin:8px 0 6px}
@@ -143,8 +137,8 @@ button,input{font:inherit;color:inherit}
 .dia.hoje{outline:1.5px solid var(--vermelho)}
 .dia .m{width:24px;height:24px;margin:6px auto 4px;border-radius:50%;display:grid;place-items:center;font:700 13px/1 var(--cond)}
 .dia .k{font:500 11.5px/1 var(--cond);color:var(--apagado);min-height:1em}
-.m-c{background:var(--vermelho);color:#fff} .m-o{background:var(--texto);color:#000}
-.m-p{border:1.5px dashed var(--fraco);color:var(--apagado)} .m-x{border:1.5px solid #FF5A66;color:#FF5A66} .m-l{color:var(--fraco)}
+.m-c{background:var(--vermelho);color:#fff} .m-o{background:var(--texto);color:#fff}
+.m-p{border:1.5px dashed var(--fraco);color:var(--apagado)} .m-x{border:1.5px solid #FF3B30;color:#FF3B30} .m-l{color:var(--fraco)}
 
 /* números de carga */
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -152,7 +146,7 @@ button,input{font:inherit;color:inherit}
 .trio small{display:block;font-size:12.5px;color:var(--apagado);line-height:1.2}
 .trio b{display:block;font:700 30px/1.05 var(--cond)}
 .trio span{font-size:12px}
-.faixa-forma{position:relative;height:12px;border-radius:6px;margin:14px 0 4px;background:linear-gradient(90deg,#FF5A66 0 20%,var(--laranja) 20% 40%,var(--verde) 40% 70%,var(--azul) 70% 100%)}
+.faixa-forma{position:relative;height:12px;border-radius:6px;margin:14px 0 4px;background:linear-gradient(90deg,#FF3B30 0 20%,var(--laranja) 20% 40%,var(--verde) 40% 70%,var(--azul) 70% 100%)}
 .faixa-forma i{position:absolute;top:-5px;width:4px;height:22px;background:#fff;border-radius:2px;transform:translateX(-50%)}
 .faixa-leg{display:flex;justify-content:space-between;font-size:11.5px;color:var(--apagado)}
 
@@ -203,8 +197,8 @@ button,input{font:inherit;color:inherit}
 .semk{display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 13.5px/1.1 var(--cond)}
 .semk small{font:500 10.5px/1.1 var(--corpo);color:var(--apagado)}
 .selos{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.selo{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--painel2);color:#D6D6DA}
-.selo.alerta{color:#FF5A66}
+.selo{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--painel2);color:var(--apagado)}
+.selo.alerta{color:#FF3B30}
 .data-l{font:600 15px/1 var(--cond);color:var(--apagado);margin-bottom:6px}
 .ritmos{width:100%;border-collapse:collapse}
 .ritmos td{padding:9px 0;border-bottom:1px solid var(--linha);vertical-align:top;font-size:13.5px;color:var(--apagado)}
@@ -218,10 +212,10 @@ button,input{font:inherit;color:inherit}
 .degrau{background:var(--painel2);border-radius:10px;padding:9px 10px;font:600 15px/1.1 var(--cond);color:var(--fraco)}
 .degrau small{display:block;font:400 11.5px/1.25 var(--corpo);margin-top:3px}
 .degrau.feito{color:var(--apagado)}
-.degrau.agora{background:var(--texto);color:#000}
-.fase-n{font:800 44px/.95 var(--cond)}
+.degrau.agora{background:var(--texto);color:#fff}
+.fase-n{font:800 34px/1.05 var(--cond);overflow-wrap:break-word}
 .fase-s{color:var(--apagado);font:500 16px/1.2 var(--cond);margin-top:4px}
-.fase-s + .selo{display:inline-block;margin-top:10px;color:var(--amarelo)}
+.fase-s + .selo{display:inline-block;margin-top:10px;background:#FFF4CC;color:#8A6100}
 blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid var(--vermelho);padding-left:12px}
 .regua{position:relative;height:84px;margin:6px 26px 0}
 .regua .eixo{position:absolute;left:-26px;right:-26px;top:40px;height:4px;border-radius:2px;background:var(--painel2)}
@@ -234,7 +228,7 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
 .dicas li{background:var(--painel2);border-radius:12px;padding:11px 12px;margin-bottom:8px;box-shadow:inset 4px 0 0 var(--fraco)}
 .dicas li[data-n="3"]{box-shadow:inset 4px 0 0 var(--vermelho)} .dicas li[data-n="2"]{box-shadow:inset 4px 0 0 var(--amarelo)} .dicas li[data-n="0"]{box-shadow:inset 4px 0 0 var(--verde)}
 .dicas h3{font:700 18px/1.15 var(--cond);margin-bottom:3px}
-.dicas p{font-size:13.5px;line-height:1.45;color:#D6D6DA}
+.dicas p{font-size:13.5px;line-height:1.45;color:#3A3A3C}
 .rec{width:100%;border-collapse:collapse;font-size:14px}
 .rec th,.rec td{text-align:left;padding:9px 0;border-bottom:1px solid var(--linha)}
 .rec th{font-weight:500;color:var(--apagado);font-size:12.5px}
@@ -245,7 +239,7 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
 .rodape button{background:var(--painel);border:0;border-radius:999px;padding:8px 14px;font:600 14px/1 var(--cond);color:var(--apagado);cursor:pointer}
 
 /* barra de abas */
-.abas{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid #1F1F22}
+.abas{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(249,249,251,.92);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid rgba(60,60,67,.29)}
 .aba{background:none;border:0;color:var(--fraco);height:var(--nav);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 13px/1 var(--cond);cursor:pointer;position:relative}
 .aba svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .aba[aria-current=page]{color:var(--texto)}
@@ -518,7 +512,7 @@ function fitness(){
 function zonaForma(tsb, ctl){
   const r = ctl > 0 ? tsb / ctl : 0;
   if (ctl < 15) return ["reconstruindo", "var(--azul)", "O condicionamento ainda está baixo depois da pausa, então qualquer treino pesa na conta. O que faz esse número subir é a constância semana a semana, não um treino forte."];
-  if (r < -0.3) return ["sobrecarga", "#FF5A66", "A carga recente está bem acima do que o corpo está acostumado. Risco alto de lesão: priorize descanso."];
+  if (r < -0.3) return ["sobrecarga", "#FF3B30", "A carga recente está bem acima do que o corpo está acostumado. Risco alto de lesão: priorize descanso."];
   if (r < -0.1) return ["produtivo", "var(--laranja)", "Você está treinando acima da sua média, o que gera adaptação. Mantenha o sono em dia."];
   if (r <= 0.2) return ["equilibrado", "var(--verde)", "Carga e condicionamento estão alinhados. Zona boa para manter a progressão."];
   return ["descansado", "var(--azul)", "A carga recente está bem abaixo do seu condicionamento: o corpo está descansado, mas perde estímulo se ficar assim."];
@@ -526,7 +520,7 @@ function zonaForma(tsb, ctl){
 
 /* ---------- gráficos ---------- */
 const W = 340;
-function eixoY(y0, y1, Y, pe, c=0){ return [y0 + (y1-y0)*.15, (y0+y1)/2, y1 - (y1-y0)*.15].map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2E2E32"/><text x="${pe-6}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#8A8A90" font-family="Saira">${nf(v,c)}</text>`).join(""); }
+function eixoY(y0, y1, Y, pe, c=0){ return [y0 + (y1-y0)*.15, (y0+y1)/2, y1 - (y1-y0)*.15].map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E5E5EA"/><text x="${pe-6}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#6E6E73" font-family="-apple-system,sans-serif">${nf(v,c)}</text>`).join(""); }
 function grafLinhas(series, o={}){
   const H = o.h || 170, pe = 30, pt = 10, pb = 20;
   const todas = series.flatMap(s => s.pts.filter(p => p.v != null)).concat((o.banda||[]).flatMap(b => [{d:b.d, v:b.lo},{d:b.d, v:b.hi}]));
@@ -534,19 +528,19 @@ function grafLinhas(series, o={}){
   const vs = todas.map(p => p.v), mn = Math.min(...vs, o.min ?? Infinity), mx = Math.max(...vs), f = (mx-mn)*.1 || 1;
   const y0 = mn - f, y1 = mx + f, d0 = o.de || todas.reduce((a,p)=>p.d<a?p.d:a, todas[0].d), d1 = o.ate || todas.reduce((a,p)=>p.d>a?p.d:a, todas[0].d);
   const span = Math.max(difDias(d0, d1), 1), X = d => pe + difDias(d0, d) / span * (W - pe - 4), Y = v => pt + (1 - (v - y0)/(y1 - y0)) * (H - pt - pb);
-  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.rotulo||""}">` + (o.semEixo ? [y0+(y1-y0)*.15,(y0+y1)/2,y1-(y1-y0)*.15].map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2E2E32"/>`).join("") : eixoY(y0, y1, Y, pe, o.c||0));
-  if (o.zero) s += `<line x1="${pe}" x2="${W}" y1="${Y(0)}" y2="${Y(0)}" stroke="#55555A"/>`;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.rotulo||""}">` + (o.semEixo ? [y0+(y1-y0)*.15,(y0+y1)/2,y1-(y1-y0)*.15].map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E5E5EA"/>`).join("") : eixoY(y0, y1, Y, pe, o.c||0));
+  if (o.zero) s += `<line x1="${pe}" x2="${W}" y1="${Y(0)}" y2="${Y(0)}" stroke="#C7C7CC"/>`;
   if (o.banda && o.banda.length > 1){
-    const b = o.banda; s += `<path d="${b.map((p,i)=>`${i?"L":"M"}${X(p.d).toFixed(1)},${Y(p.hi).toFixed(1)}`).join("")}${[...b].reverse().map(p=>`L${X(p.d).toFixed(1)},${Y(p.lo).toFixed(1)}`).join("")}Z" fill="${o.bandaCor||"#2FBF71"}" opacity=".22"/>`;
+    const b = o.banda; s += `<path d="${b.map((p,i)=>`${i?"L":"M"}${X(p.d).toFixed(1)},${Y(p.hi).toFixed(1)}`).join("")}${[...b].reverse().map(p=>`L${X(p.d).toFixed(1)},${Y(p.lo).toFixed(1)}`).join("")}Z" fill="${o.bandaCor||"#34C759"}" opacity=".22"/>`;
   }
-  if (o.barras) s += o.barras.map(p => `<rect x="${(X(p.d)-1).toFixed(1)}" width="2.2" y="${Math.min(Y(p.v), Y(0)).toFixed(1)}" height="${Math.abs(Y(p.v)-Y(0)).toFixed(1)}" fill="${p.v>=0?"#2FBF71":"#FF5A66"}" opacity=".55"/>`).join("");
+  if (o.barras) s += o.barras.map(p => `<rect x="${(X(p.d)-1).toFixed(1)}" width="2.2" y="${Math.min(Y(p.v), Y(0)).toFixed(1)}" height="${Math.abs(Y(p.v)-Y(0)).toFixed(1)}" fill="${p.v>=0?"#34C759":"#FF3B30"}" opacity=".55"/>`).join("");
   for (const sr of series){
     const pts = sr.pts.filter(p => p.v != null);
     if (sr.pontos) s += pts.map(p => `<circle cx="${X(p.d).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="1.8" fill="${sr.cor}"/>`).join("");
     else { s += `<path d="${pts.map((p,i)=>`${i?"L":"M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("")}" fill="none" stroke="${sr.cor}" stroke-width="${sr.w||2.2}" stroke-linejoin="round" stroke-linecap="round"/>`;
-      const u = pts.at(-1); if (u && sr.ponta) s += `<circle cx="${X(u.d)}" cy="${Y(u.v)}" r="4" fill="${sr.cor}" stroke="#1C1C1E" stroke-width="2"/>`; }
+      const u = pts.at(-1); if (u && sr.ponta) s += `<circle cx="${X(u.d)}" cy="${Y(u.v)}" r="4" fill="${sr.cor}" stroke="#FFFFFF" stroke-width="2"/>`; }
   }
-  s += `<text x="${pe}" y="${H-4}" font-size="10.5" fill="#8A8A90" font-family="Saira">${dBR(d0)}</text><text x="${W}" y="${H-4}" font-size="10.5" fill="#8A8A90" text-anchor="end" font-family="Saira">${dBR(d1)}</text></svg>`;
+  s += `<text x="${pe}" y="${H-4}" font-size="10.5" fill="#6E6E73" font-family="-apple-system,sans-serif">${dBR(d0)}</text><text x="${W}" y="${H-4}" font-size="10.5" fill="#6E6E73" text-anchor="end" font-family="-apple-system,sans-serif">${dBR(d1)}</text></svg>`;
   return s;
 }
 function grafBarras(itens, o={}){
@@ -554,19 +548,19 @@ function grafBarras(itens, o={}){
   if (!n) return `<p class="vazio">Sem dados neste período.</p>`;
   const mx = Math.max(o.min || 1, ...itens.map(i => Math.max(i.v, i.meta || 0))), bw = (W - pe)/n;
   const Y = v => pt + (1 - v/mx) * (H - pt - pb);
-  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.rotulo||""}">` + [0, mx/2, mx].map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2E2E32"/><text x="${pe-5}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#8A8A90" font-family="Saira">${nf(v, mx < 10 ? 1 : 0)}</text>`).join("");
-  if (o.linha != null) s += `<line x1="${pe}" x2="${W}" y1="${Y(o.linha)}" y2="${Y(o.linha)}" stroke="#F4F4F5" stroke-dasharray="4 4"/><text x="${W}" y="${Y(o.linha)-4}" text-anchor="end" font-size="10.5" fill="#F4F4F5" font-family="Saira">${o.linhaRot||""}</text>`;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.rotulo||""}">` + [0, mx/2, mx].map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E5E5EA"/><text x="${pe-5}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#6E6E73" font-family="-apple-system,sans-serif">${nf(v, mx < 10 ? 1 : 0)}</text>`).join("");
+  if (o.linha != null) s += `<line x1="${pe}" x2="${W}" y1="${Y(o.linha)}" y2="${Y(o.linha)}" stroke="#1C1C1E" stroke-dasharray="4 4"/><text x="${W}" y="${Y(o.linha)-4}" text-anchor="end" font-size="10.5" fill="#1C1C1E" font-family="-apple-system,sans-serif">${o.linhaRot||""}</text>`;
   itens.forEach((it,i) => { const g = Math.min(4, bw*.25), x = pe + i*bw + g/2, w = Math.max(bw - g, 1.5), y = Y(it.v);
-    if (it.meta) s += `<rect x="${x.toFixed(1)}" y="${Y(it.meta).toFixed(1)}" width="${w.toFixed(1)}" height="${(H-pb-Y(it.meta)).toFixed(1)}" fill="none" stroke="#6B6B70" stroke-dasharray="3 2" rx="2"/>`;
-    s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(H-pb-y,0).toFixed(1)}" fill="${it.cor||"#6B6B70"}" rx="2"><title>${it.t||""}</title></rect>`; });
-  s += `<text x="${pe}" y="${H-4}" font-size="10.5" fill="#8A8A90" font-family="Saira">${itens[0].rot||""}</text><text x="${W}" y="${H-4}" font-size="10.5" fill="#8A8A90" text-anchor="end" font-family="Saira">${itens.at(-1).rot||""}</text></svg>`;
+    if (it.meta) s += `<rect x="${x.toFixed(1)}" y="${Y(it.meta).toFixed(1)}" width="${w.toFixed(1)}" height="${(H-pb-Y(it.meta)).toFixed(1)}" fill="none" stroke="#8E8E93" stroke-dasharray="3 2" rx="2"/>`;
+    s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(H-pb-y,0).toFixed(1)}" fill="${it.cor||"#8E8E93"}" rx="2"><title>${it.t||""}</title></rect>`; });
+  s += `<text x="${pe}" y="${H-4}" font-size="10.5" fill="#6E6E73" font-family="-apple-system,sans-serif">${itens[0].rot||""}</text><text x="${W}" y="${H-4}" font-size="10.5" fill="#6E6E73" text-anchor="end" font-family="-apple-system,sans-serif">${itens.at(-1).rot||""}</text></svg>`;
   return s;
 }
-function sparkline(pts, cor="#F4F4F5"){
+function sparkline(pts, cor="#1C1C1E"){
   if (pts.length < 2) return "";
   const vs = pts.map(p=>p.v), mn = Math.min(...vs), r = Math.max(...vs) - mn || 1, t0 = pts[0].d, span = Math.max(difDias(t0, pts.at(-1).d), 1);
   const X = d => 2 + difDias(t0, d)/span*54, Y = v => 3 + (1-(v-mn)/r)*20, u = pts.at(-1);
-  return `<svg viewBox="0 0 58 26" aria-hidden="true"><path d="${pts.map((p,i)=>`${i?"L":"M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("")}" fill="none" stroke="${cor}" stroke-width="1.6" opacity=".85"/><circle cx="${X(u.d)}" cy="${Y(u.v)}" r="2.6" fill="#EB0A1E"/></svg>`;
+  return `<svg viewBox="0 0 58 26" aria-hidden="true"><path d="${pts.map((p,i)=>`${i?"L":"M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("")}" fill="none" stroke="${cor}" stroke-width="1.6" opacity=".85"/><circle cx="${X(u.d)}" cy="${Y(u.v)}" r="2.6" fill="#FF375F"/></svg>`;
 }
 function perfilHTML(perfil){
   if (!perfil || !perfil.length) return "";
@@ -609,12 +603,12 @@ function renderTudo(){
 }
 
 function gaugeSVG(v){
-  const R = 92, C = 2*Math.PI*R, arco = C*0.75, cor = v == null ? "#55555A" : v >= 70 ? "#2FBF71" : v >= 45 ? "#F5C400" : "#FF5A66";
+  const R = 92, C = 2*Math.PI*R, arco = C*0.75, cor = v == null ? "#C7C7CC" : v >= 70 ? "#34C759" : v >= 45 ? "#FFCC00" : "#FF3B30";
   const prog = v == null ? 0 : Math.max(0, Math.min(100, v))/100*arco;
   return `<svg viewBox="0 0 230 210" aria-hidden="true"><g transform="rotate(135 115 115)">
-    <circle cx="115" cy="115" r="${R}" fill="none" stroke="#2A2A2D" stroke-width="16" stroke-dasharray="${arco} ${C}" stroke-linecap="round"/>
+    <circle cx="115" cy="115" r="${R}" fill="none" stroke="#E5E5EA" stroke-width="16" stroke-dasharray="${arco} ${C}" stroke-linecap="round"/>
     <circle class="arco" cx="115" cy="115" r="${R}" fill="none" stroke="${cor}" stroke-width="16" stroke-dasharray="${arco} ${C}" stroke-dashoffset="${arco - prog}" stroke-linecap="round"/></g>
-    <text x="40" y="200" font-size="11" fill="#8A8A90" font-family="Saira">0</text><text x="186" y="200" font-size="11" fill="#8A8A90" font-family="Saira">100</text></svg>`;
+    <text x="40" y="200" font-size="11" fill="#6E6E73" font-family="-apple-system,sans-serif">0</text><text x="186" y="200" font-size="11" fill="#6E6E73" font-family="-apple-system,sans-serif">100</text></svg>`;
 }
 
 function renderHoje(){
@@ -623,7 +617,6 @@ function renderHoje(){
   $("hData").textContent = dt.toLocaleDateString("pt-BR",{day:"numeric", month:"long"});
   const pr = dd.readiness_score, est = pr == null ? "Sem dado" : pr >= 70 ? "Pronto para treinar" : pr >= 45 ? "Treine com moderação" : "Dia de recuperar";
   $("hGauge").innerHTML = gaugeSVG(pr) + `<div class="valor"><b class="n">${pr == null ? "–" : nf(pr)}</b><span>prontidão</span></div><div class="estado">${est}</div>`;
-  document.querySelector(".hero").style.setProperty("--glow-cor", pr == null ? "#55555A" : pr >= 70 ? "#2FBF71" : pr >= 45 ? "#F5C400" : "#FF5A66");
   const L = $("hLampadas"); L.textContent = "";
   for (const k of ["recuperacao","carga","performance"]){
     const s = h.semaforos[k] || {cor:"cinza", texto:"sem dado"};
@@ -783,7 +776,7 @@ function renderAnalise(){
   $("aPeriodo").textContent = `${dBR(de)} a ${dBR(ate)}`;
   // carga
   const fit = FIT.filter(p => p.d >= de && p.d <= ate);
-  $("aCarga").innerHTML = grafLinhas([{pts:fit.map(p=>({d:p.d, v:p.ctl})), cor:"#3D8BFF", ponta:true}, {pts:fit.map(p=>({d:p.d, v:p.atl})), cor:"#FF8A1F", w:1.8, ponta:true}],
+  $("aCarga").innerHTML = grafLinhas([{pts:fit.map(p=>({d:p.d, v:p.ctl})), cor:"#007AFF", ponta:true}, {pts:fit.map(p=>({d:p.d, v:p.atl})), cor:"#FF9500", w:1.8, ponta:true}],
     {barras: fit.map(p => ({d:p.d, v:p.tsb})), zero:true, de, ate, rotulo:"Condicionamento, carga recente e forma"});
   if (fit.length){
     const a = fit[0], b = fit.at(-1), z = zonaForma(b.tsb, b.ctl), pico = fit.reduce((m,p)=>p.ctl>m.ctl?p:m, fit[0]);
@@ -795,7 +788,7 @@ function renderAnalise(){
     const m7 = movel(hrv, 7).filter(p => p.d >= de);
     const banda = noites.map(p => { const base = hrv.filter(q => q.d < p.d && q.d >= addDias(p.d, -60)).map(q=>q.v); const m = media(base), s = dp(base);
       return m == null || base.length < 10 ? null : {d:p.d, lo:m - .75*s, hi:m + .75*s}; }).filter(Boolean);
-    $("aHrv").innerHTML = grafLinhas([{pts:noites, cor:"#6B6B70", pontos:true}, {pts:m7, cor:"#F4F4F5", ponta:true}], {banda, de, ate, rotulo:"HRV"});
+    $("aHrv").innerHTML = grafLinhas([{pts:noites, cor:"#8E8E93", pontos:true}, {pts:m7, cor:"#1C1C1E", ponta:true}], {banda, de, ate, rotulo:"HRV"});
     const u = m7.at(-1), bu = banda.at(-1);
     $("aHrvTxt").innerHTML = bu ? (u.v < bu.lo ? `A média de 7 dias (<b>${nf(u.v)} ms</b>) está <b>abaixo</b> da sua faixa normal (${nf(bu.lo)}–${nf(bu.hi)}). Sinal de estresse acumulado: segure a intensidade.`
       : u.v > bu.hi ? `A média de 7 dias (<b>${nf(u.v)} ms</b>) está <b>acima</b> da sua faixa (${nf(bu.lo)}–${nf(bu.hi)}). Costuma ser bom sinal; se vier com cansaço, pode ser recuperação incompleta.`
@@ -804,7 +797,7 @@ function renderAnalise(){
   // sono
   const sono = serie("sono", de, ate);
   const ultimas = sono.slice(-Math.min(sono.length, difDias(de, ate) > 60 ? 60 : 30));
-  $("aSono").innerHTML = grafBarras(ultimas.map((p,i) => ({v:p.v, cor: p.v >= 7 ? "#2FBF71" : p.v >= 6 ? "#F5C400" : "#FF5A66", rot: i === 0 ? dBR(p.d) : i === ultimas.length - 1 ? dBR(p.d) : "", t:`${dBR(p.d)}: ${nf(p.v,1)} h`})), {linha:7.5, linhaRot:"meta 7,5 h", min:9, rotulo:"Horas de sono por noite"});
+  $("aSono").innerHTML = grafBarras(ultimas.map((p,i) => ({v:p.v, cor: p.v >= 7 ? "#34C759" : p.v >= 6 ? "#FFCC00" : "#FF3B30", rot: i === 0 ? dBR(p.d) : i === ultimas.length - 1 ? dBR(p.d) : "", t:`${dBR(p.d)}: ${nf(p.v,1)} h`})), {linha:7.5, linhaRot:"meta 7,5 h", min:9, rotulo:"Horas de sono por noite"});
   if (sono.length){
     const m = media(sono.map(p=>p.v)), pc = sono.filter(p => p.v >= 7).length / sono.length * 100, sc = media(serie("sono_score", de, ate).map(p=>p.v));
     const porDia = DIAS_SEM.map((d,i) => ({d, v:media(sono.filter(p => dow(p.d) === i).map(p=>p.v))})); // sono do dia D = noite anterior a D
@@ -825,7 +818,7 @@ function renderAnalise(){
   const vo2 = serie("vo2", de, ate), fc = movel(serie("fc", addDias(de,-6), ate), 7).filter(p => p.d >= de);
   if (vo2.length >= 2 || fc.length >= 2){
     const norm = (pts) => { const vs = pts.map(p=>p.v), mn = Math.min(...vs), mx = Math.max(...vs); return pts.map(p => ({d:p.d, v:(p.v - mn)/((mx-mn)||1)*100})); };
-    $("aVo2").innerHTML = grafLinhas([{pts:norm(vo2), cor:"#A57BFF", ponta:true}, {pts:norm(fc), cor:"#EB0A1E", ponta:true, w:1.8}], {de, ate, semEixo:true, rotulo:"VO2max e FC de repouso"});
+    $("aVo2").innerHTML = grafLinhas([{pts:norm(vo2), cor:"#AF52DE", ponta:true}, {pts:norm(fc), cor:"#FF375F", ponta:true, w:1.8}], {de, ate, semEixo:true, rotulo:"VO2max e FC de repouso"});
     const v0 = vo2[0], v1 = vo2.at(-1), f0 = fc[0], f1 = fc.at(-1);
     $("aVo2Txt").innerHTML = `${v0 ? `VO2max: <b>${nf(v0.v,1)}</b> → <b>${nf(v1.v,1)}</b>. ` : ""}${f0 ? `FC de repouso (média 7 d): <b>${nf(f0.v)}</b> → <b>${nf(f1.v)} bpm</b>. ` : ""}` + (v0 && f0 ? (v1.v < v0.v && f1.v > f0.v ? "O desenho atual é o de destreino: VO2max caindo e FC de repouso subindo. Com a retomada, as linhas devem voltar a se afastar, VO2max para cima e FC para baixo."
       : v1.v >= v0.v && f1.v <= f0.v ? "VO2max subindo e FC de repouso caindo: é o desenho de quem está ganhando forma." : "Sinais mistos no período. Vale olhar de novo daqui a 4 semanas de plano cumprido.") : "") + ` <span class="texto-apagado">Linhas em escala relativa para comparar a tendência.</span>`;
@@ -851,7 +844,7 @@ function renderAtividades(){
     const fim = addDias(s, 6), dentro = lista.filter(a => a.data >= s && a.data <= fim);
     const v = usaKm ? dentro.filter(a=>ehCorrida(a.tipo)).reduce((x,a)=>x+a.km,0) : dentro.reduce((x,a)=>x+a.min,0)/60;
     let meta = 0; if (usaKm) for (let i = 0; i < 7; i++){ const sv = planoDe(addDias(s,i)).sessao; if (sv && sv.km) meta += sv.km; }
-    sem.push({v, meta: meta || null, s, cor: fim >= D.hoje.data ? "#EB0A1E" : "#8A8A90", rot: sem.length ? "" : dBR(s), t:`Semana de ${dBR(s)}: ${nf(v,1)}`});
+    sem.push({v, meta: meta || null, s, cor: fim >= D.hoje.data ? "#FF375F" : "#6E6E73", rot: sem.length ? "" : dBR(s), t:`Semana de ${dBR(s)}: ${nf(v,1)}`});
   }
   if (sem.length) sem.at(-1).rot = "esta semana";
   $("tVol").innerHTML = grafBarras(sem, {min: usaKm ? 10 : 2, rotulo:"Volume semanal"});
@@ -869,7 +862,7 @@ function renderAtividades(){
   const ef = corr.filter(a => a.km >= 3 && a.fc > 100).map(a => ({d:a.data, v:a.km*1000/a.min/a.fc}));
   if (ef.length >= 3){
     const mv = ef.map((p,i) => ({d:p.d, v:media(ef.slice(Math.max(0,i-4), i+1).map(q=>q.v))}));
-    $("tEf").innerHTML = grafLinhas([{pts:ef, cor:"#6B6B70", pontos:true}, {pts:mv, cor:"#3D8BFF", ponta:true}], {de, ate, c:2, rotulo:"Eficiência aeróbica"});
+    $("tEf").innerHTML = grafLinhas([{pts:ef, cor:"#8E8E93", pontos:true}, {pts:mv, cor:"#007AFF", ponta:true}], {de, ate, c:2, rotulo:"Eficiência aeróbica"});
     const a = media(ef.slice(0,5).map(p=>p.v)), b = media(ef.slice(-5).map(p=>p.v)), dl = (b/a-1)*100;
     $("tEfTxt").innerHTML = Math.abs(dl) < 2 ? "Eficiência <b>estável</b> no período." : `Eficiência <b>${dl>0?"subiu":"caiu"} ${nf(Math.abs(dl))}%</b> do início para o fim do período${dl<0 ? ". É reflexo de menos volume e volta com base leve." : "."}`;
   } else { $("tEf").innerHTML = ""; $("tEfTxt").textContent = "Precisa de 3 corridas de 3 km ou mais no período."; }
@@ -905,9 +898,9 @@ function renderCoach(){
   $("cMetaTitulo").textContent = m ? `Meta do ${m.prova}` : "Meta de prova";
   if (m){ const vs = [m.recorde, m.alvo, m.previsao], lo = Math.min(...vs) - 30, hi = Math.max(...vs) + 30, P = v => (1 - (v-lo)/(hi-lo))*100;
     R.innerHTML = `<div class="eixo"></div><div class="trecho" style="left:${P(m.previsao)}%;width:${P(m.alvo)-P(m.previsao)}%"></div>
-      <div class="pt" style="left:${P(m.previsao)}%;background:#8A8A90"></div><div class="lbl" style="left:${P(m.previsao)}%"><b>${tempo(m.previsao)}</b>hoje</div>
-      <div class="pt" style="left:${P(m.alvo)}%;background:#F4F4F5"></div><div class="lbl cima" style="left:${P(m.alvo)}%"><b>${tempo(m.alvo)}</b>próximo marco</div>
-      <div class="pt" style="left:${P(m.recorde)}%;background:#EB0A1E"></div><div class="lbl" style="left:${P(m.recorde)}%"><b>${tempo(m.recorde)}</b>recorde</div>`;
+      <div class="pt" style="left:${P(m.previsao)}%;background:#6E6E73"></div><div class="lbl" style="left:${P(m.previsao)}%"><b>${tempo(m.previsao)}</b>hoje</div>
+      <div class="pt" style="left:${P(m.alvo)}%;background:#1C1C1E"></div><div class="lbl cima" style="left:${P(m.alvo)}%"><b>${tempo(m.alvo)}</b>próximo marco</div>
+      <div class="pt" style="left:${P(m.recorde)}%;background:#FF375F"></div><div class="lbl" style="left:${P(m.recorde)}%"><b>${tempo(m.recorde)}</b>recorde</div>`;
     $("cMetaTxt").innerHTML = `A previsão de hoje está <b>${tempo(m.previsao - m.recorde)}</b> acima do seu recorde. ${esc(m.texto)}`; }
   $("cDicas").innerHTML = (D.dicas || []).map(d => `<li data-n="${d.nivel}"><h3>${esc(d.titulo)}</h3><p>${esc(d.texto)}</p></li>`).join("");
   const Rc = D.recordes || {}, dd = D.hoje.dados;
