@@ -151,6 +151,12 @@ button,input{font:inherit;color:inherit}
 .faixa-leg{display:flex;justify-content:space-between;font-size:11.5px;color:var(--apagado)}
 
 /* gráficos */
+.stat-hero{margin-bottom:6px;display:flex;align-items:baseline;gap:7px}
+.stat-hero b{font:800 30px/1 var(--cond)}
+.stat-hero span{font-size:13px;color:var(--apagado)}
+.stat-hero.sm b{font-size:22px}
+.mini-graf{display:flex;flex-direction:column;gap:18px}
+.mini-graf-item + .mini-graf-item{padding-top:18px;border-top:1px solid var(--linha)}
 .graf svg{display:block;width:100%;height:auto;overflow:visible}
 .legenda{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--apagado);margin-top:8px}
 .legenda span::before{content:"";display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:3px;background:var(--c)}
@@ -324,14 +330,23 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
   <div class="datas oculto" id="aDatas"><input type="date" id="aDe" aria-label="De"><span>até</span><input type="date" id="aAte" aria-label="Até"></div>
 
   <div class="painel">
-    <h2>Condicionamento e fadiga</h2>
+    <h2>Condicionamento e carga</h2>
+    <div class="stat-hero" id="aCargaHero"></div>
     <div class="graf" id="aCarga"></div>
-    <div class="legenda"><span style="--c:var(--azul)">Condicionamento (42 d)</span><span style="--c:var(--laranja)">Carga recente (7 d)</span><span class="area" style="--c:var(--verde)">Forma</span></div>
+    <div class="legenda"><span style="--c:var(--azul)">Condicionamento (42 d)</span><span style="--c:var(--laranja)">Carga recente (7 d)</span></div>
     <p class="leitura" id="aCargaTxt"></p>
   </div>
 
   <div class="painel">
+    <h2>Forma</h2>
+    <div class="stat-hero" id="aFormaHero"></div>
+    <div class="graf" id="aForma"></div>
+    <p class="leitura" id="aFormaTxt"></p>
+  </div>
+
+  <div class="painel">
     <h2>HRV noturno</h2>
+    <div class="stat-hero" id="aHrvHero"></div>
     <div class="graf" id="aHrv"></div>
     <div class="legenda"><span style="--c:var(--texto)">Média de 7 dias</span><span class="area" style="--c:var(--verde)">Sua faixa normal</span><span style="--c:var(--fraco)">Noites</span></div>
     <p class="leitura" id="aHrvTxt"></p>
@@ -339,6 +354,7 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
 
   <div class="painel">
     <h2>Sono</h2>
+    <div class="stat-hero" id="aSonoHero"></div>
     <div class="graf" id="aSono"></div>
     <div class="stats" id="aSonoStats"></div>
     <p class="leitura" id="aSonoTxt"></p>
@@ -353,8 +369,10 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
 
   <div class="painel">
     <h2>VO2max e FC de repouso</h2>
-    <div class="graf" id="aVo2"></div>
-    <div class="legenda"><span style="--c:var(--roxo)">VO2max</span><span style="--c:var(--vermelho)">FC de repouso</span></div>
+    <div class="mini-graf">
+      <div class="mini-graf-item"><div class="stat-hero sm" id="aVo2Hero"></div><div class="graf" id="aVo2"></div></div>
+      <div class="mini-graf-item"><div class="stat-hero sm" id="aFcHero"></div><div class="graf" id="aFc"></div></div>
+    </div>
     <p class="leitura" id="aVo2Txt"></p>
   </div>
 </section>
@@ -472,6 +490,7 @@ const dow = iso => (new Date(iso+"T12:00:00").getDay() + 6) % 7;
 const cap = t => t ? t[0].toUpperCase() + t.slice(1) : t;
 const esc = t => String(t ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const media = a => { const v = a.filter(x => x != null && !isNaN(x)); return v.length ? v.reduce((s,x)=>s+x,0)/v.length : null; };
+const seta = (a, b) => b == null ? "" : a > b + 1 ? "subindo" : a < b - 1 ? "caindo" : "estável";
 const dp = a => { const m = media(a); if (m == null) return null; const v = a.filter(x=>x!=null); return Math.sqrt(v.reduce((s,x)=>s+(x-m)**2,0)/v.length); };
 
 const TIPOS = {running:["Corrida","C"], treadmill_running:["Esteira","C"], track_running:["Pista","C"], trail_running:["Trilha","C"],
@@ -523,7 +542,7 @@ const W = 340;
 function eixoY(y0, y1, Y, pe, c=0){ return [y0 + (y1-y0)*.15, (y0+y1)/2, y1 - (y1-y0)*.15].map(v => `<line x1="${pe}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E5E5EA"/><text x="${pe-6}" y="${Y(v)+4}" text-anchor="end" font-size="10.5" fill="#6E6E73" font-family="-apple-system,sans-serif">${nf(v,c)}</text>`).join(""); }
 function grafLinhas(series, o={}){
   const H = o.h || 170, pe = 30, pt = 10, pb = 20;
-  const todas = series.flatMap(s => s.pts.filter(p => p.v != null)).concat((o.banda||[]).flatMap(b => [{d:b.d, v:b.lo},{d:b.d, v:b.hi}]));
+  const todas = series.flatMap(s => s.pts.filter(p => p.v != null)).concat((o.banda||[]).flatMap(b => [{d:b.d, v:b.lo},{d:b.d, v:b.hi}])).concat(o.barras||[]);
   if (todas.length < 2) return `<p class="vazio">Sem dados suficientes neste período.</p>`;
   const vs = todas.map(p => p.v), mn = Math.min(...vs, o.min ?? Infinity), mx = Math.max(...vs), f = (mx-mn)*.1 || 1;
   const y0 = mn - f, y1 = mx + f, d0 = o.de || todas.reduce((a,p)=>p.d<a?p.d:a, todas[0].d), d1 = o.ate || todas.reduce((a,p)=>p.d>a?p.d:a, todas[0].d);
@@ -680,7 +699,6 @@ function renderHoje(){
 
   // carga
   const u = FIT.at(-1) || {ctl:0, atl:0, tsb:0}, z = zonaForma(u.tsb, u.ctl), ant = FIT.at(-8);
-  const seta = (a, b) => b == null ? "" : a > b + 1 ? "subindo" : a < b - 1 ? "caindo" : "estável";
   $("hCarga").innerHTML = `<div><small>Condicionamento</small><b class="n" style="color:var(--azul)">${nf(u.ctl)}</b><span class="texto-apagado">${seta(u.ctl, ant && ant.ctl)}</span></div>
     <div><small>Carga recente</small><b class="n" style="color:var(--laranja)">${nf(u.atl)}</b><span class="texto-apagado">${seta(u.atl, ant && ant.atl)}</span></div>
     <div><small>Forma</small><b class="n" style="color:${z[1]}">${u.tsb >= 0 ? "+" : ""}${nf(u.tsb)}</b><span class="texto-apagado">${z[0]}</span></div>`;
@@ -774,14 +792,22 @@ function montarPeriodos(){
 function renderAnalise(){
   const [de, ate] = intervalo("a");
   $("aPeriodo").textContent = `${dBR(de)} a ${dBR(ate)}`;
-  // carga
+  // condicionamento e carga (mesma unidade: um eixo só)
   const fit = FIT.filter(p => p.d >= de && p.d <= ate);
   $("aCarga").innerHTML = grafLinhas([{pts:fit.map(p=>({d:p.d, v:p.ctl})), cor:"#007AFF", ponta:true}, {pts:fit.map(p=>({d:p.d, v:p.atl})), cor:"#FF9500", w:1.8, ponta:true}],
-    {barras: fit.map(p => ({d:p.d, v:p.tsb})), zero:true, de, ate, rotulo:"Condicionamento, carga recente e forma"});
+    {de, ate, rotulo:"Condicionamento e carga recente"});
   if (fit.length){
-    const a = fit[0], b = fit.at(-1), z = zonaForma(b.tsb, b.ctl), pico = fit.reduce((m,p)=>p.ctl>m.ctl?p:m, fit[0]);
-    $("aCargaTxt").innerHTML = `Condicionamento foi de <b>${nf(a.ctl)}</b> para <b>${nf(b.ctl)}</b> no período (pico de ${nf(pico.ctl)} em ${dBR(pico.d)}). Forma atual: <b>${z[0]}</b>. ${z[2]} <span class="texto-apagado">Calculado com a carga de treino de cada atividade da Garmin, pelo modelo de fitness e fadiga.</span>`;
+    const a = fit[0], b = fit.at(-1), pico = fit.reduce((m,p)=>p.ctl>m.ctl?p:m, fit[0]), ant = fit.at(-8);
+    $("aCargaHero").innerHTML = `<b>${nf(b.ctl)}</b><span>condicionamento agora, ${seta(b.ctl, ant && ant.ctl)}</span>`;
+    $("aCargaTxt").innerHTML = `Foi de <b>${nf(a.ctl)}</b> para <b>${nf(b.ctl)}</b> no período (pico de ${nf(pico.ctl)} em ${dBR(pico.d)}). <span class="texto-apagado">Calculado com a carga de treino de cada atividade da Garmin, pelo modelo de fitness e fadiga.</span>`;
   }
+  // forma (TSB): grandeza diferente, eixo próprio
+  if (fit.length){
+    const b = fit.at(-1), z = zonaForma(b.tsb, b.ctl);
+    $("aFormaHero").innerHTML = `<b style="color:${z[1]}">${b.tsb >= 0 ? "+" : ""}${nf(b.tsb)}</b><span>${z[0]}</span>`;
+    $("aForma").innerHTML = grafLinhas([], {barras: fit.map(p => ({d:p.d, v:p.tsb, cor: p.tsb > 2 ? "#007AFF" : p.tsb < -2 ? "#FF3B30" : "#AEAEB2"})), zero:true, de, ate, rotulo:"Forma"});
+    $("aFormaTxt").innerHTML = `${z[2]} <span class="texto-apagado">Acima de zero: mais descansado que de costume. Abaixo: carregando mais do que o condicionamento atual sustenta.</span>`;
+  } else { $("aForma").innerHTML = `<p class="vazio">Sem dados neste período.</p>`; $("aFormaTxt").textContent = ""; }
   // HRV
   const hrv = serie("hrv", addDias(de, -60), ate), noites = hrv.filter(p => p.d >= de);
   if (noites.length >= 5){
@@ -790,10 +816,11 @@ function renderAnalise(){
       return m == null || base.length < 10 ? null : {d:p.d, lo:m - .75*s, hi:m + .75*s}; }).filter(Boolean);
     $("aHrv").innerHTML = grafLinhas([{pts:noites, cor:"#8E8E93", pontos:true}, {pts:m7, cor:"#1C1C1E", ponta:true}], {banda, de, ate, rotulo:"HRV"});
     const u = m7.at(-1), bu = banda.at(-1);
-    $("aHrvTxt").innerHTML = bu ? (u.v < bu.lo ? `A média de 7 dias (<b>${nf(u.v)} ms</b>) está <b>abaixo</b> da sua faixa normal (${nf(bu.lo)}–${nf(bu.hi)}). Sinal de estresse acumulado: segure a intensidade.`
-      : u.v > bu.hi ? `A média de 7 dias (<b>${nf(u.v)} ms</b>) está <b>acima</b> da sua faixa (${nf(bu.lo)}–${nf(bu.hi)}). Costuma ser bom sinal; se vier com cansaço, pode ser recuperação incompleta.`
-      : `A média de 7 dias (<b>${nf(u.v)} ms</b>) está <b>dentro</b> da sua faixa normal (${nf(bu.lo)}–${nf(bu.hi)}). Sistema nervoso equilibrado.`) + ` <span class="texto-apagado">Faixa estimada pelos seus últimos 60 dias.</span>` : "Ainda há poucas noites para estimar a sua faixa normal.";
-  } else { $("aHrv").innerHTML = `<p class="vazio">Sem noites com HRV neste período.</p>`; $("aHrvTxt").textContent = ""; }
+    $("aHrvHero").innerHTML = `<b>${nf(u.v)}</b><span>ms, média de 7 dias</span>`;
+    $("aHrvTxt").innerHTML = bu ? (u.v < bu.lo ? `Está <b>abaixo</b> da sua faixa normal (${nf(bu.lo)}–${nf(bu.hi)} ms). Sinal de estresse acumulado: segure a intensidade.`
+      : u.v > bu.hi ? `Está <b>acima</b> da sua faixa (${nf(bu.lo)}–${nf(bu.hi)} ms). Costuma ser bom sinal; se vier com cansaço, pode ser recuperação incompleta.`
+      : `Está <b>dentro</b> da sua faixa normal (${nf(bu.lo)}–${nf(bu.hi)} ms). Sistema nervoso equilibrado.`) + ` <span class="texto-apagado">Faixa estimada pelos seus últimos 60 dias.</span>` : "Ainda há poucas noites para estimar a sua faixa normal.";
+  } else { $("aHrv").innerHTML = `<p class="vazio">Sem noites com HRV neste período.</p>`; $("aHrvHero").innerHTML = ""; $("aHrvTxt").textContent = ""; }
   // sono
   const sono = serie("sono", de, ate);
   const ultimas = sono.slice(-Math.min(sono.length, difDias(de, ate) > 60 ? 60 : 30));
@@ -802,9 +829,10 @@ function renderAnalise(){
     const m = media(sono.map(p=>p.v)), pc = sono.filter(p => p.v >= 7).length / sono.length * 100, sc = media(serie("sono_score", de, ate).map(p=>p.v));
     const porDia = DIAS_SEM.map((d,i) => ({d, v:media(sono.filter(p => dow(p.d) === i).map(p=>p.v))})); // sono do dia D = noite anterior a D
     const val = porDia.filter(p=>p.v!=null), pior = val.length ? val.reduce((a,b)=>b.v<a.v?b:a) : null;
-    $("aSonoStats").innerHTML = `<div><small>Média</small><b>${nf(m,1)} h</b></div><div><small>Noites ≥ 7 h</small><b>${nf(pc)}%</b></div><div><small>Nota média</small><b>${nf(sc)}</b></div><div><small>Mais curta antes de</small><b>${pior ? pior.d : "–"}</b></div>`;
-    $("aSonoTxt").innerHTML = `Atletas de resistência precisam de 7 a 9 h. Você dormiu 7 h ou mais em <b>${nf(pc)}%</b> das noites.${pior ? ` A noite mais curta costuma ser a que antecede <b>${pior.d}</b> (${nf(pior.v,1)} h): evite treino forte nesse dia.` : ""}`;
-  } else { $("aSonoStats").innerHTML = ""; $("aSonoTxt").textContent = ""; }
+    $("aSonoHero").innerHTML = `<b>${nf(m,1)}</b><span>horas em média no período</span>`;
+    $("aSonoStats").innerHTML = `<div><small>Noites ≥ 7 h</small><b>${nf(pc)}%</b></div><div><small>Nota média</small><b>${nf(sc)}</b></div><div><small>Mais curta antes de</small><b>${pior ? pior.d : "–"}</b></div>`;
+    $("aSonoTxt").innerHTML = `Atletas de resistência precisam de 7 a 9 h.${pior ? ` A noite mais curta costuma ser a que antecede <b>${pior.d}</b> (${nf(pior.v,1)} h): evite treino forte nesse dia.` : ""}`;
+  } else { $("aSonoHero").innerHTML = ""; $("aSonoStats").innerHTML = ""; $("aSonoTxt").textContent = ""; }
   // prontidão x sono
   const dias = D.series.filter(s => s.data >= de && s.data <= ate && s.sono != null && s.prontidao != null);
   if (dias.length >= 8){
@@ -814,15 +842,21 @@ function renderAnalise(){
     const mais = fx[3].v, menos = media(dias.filter(s => s.sono < 6).map(s=>s.prontidao));
     $("aProntTxt").innerHTML = mais != null && menos != null ? `Com 7 h ou mais de sono, sua prontidão média foi <b>${nf(mais)}</b>; abaixo de 6 h, <b>${nf(menos)}</b>. Nenhum suplemento entrega ${nf(mais - menos)} pontos.` : "";
   } else { $("aPront").innerHTML = `<p class="vazio">Poucas noites neste período. Escolha 90 dias ou mais.</p>`; $("aProntTxt").textContent = ""; }
-  // VO2 e FC
+  // VO2max e FC de repouso: unidades diferentes, cada um com seu gráfico e eixo
   const vo2 = serie("vo2", de, ate), fc = movel(serie("fc", addDias(de,-6), ate), 7).filter(p => p.d >= de);
-  if (vo2.length >= 2 || fc.length >= 2){
-    const norm = (pts) => { const vs = pts.map(p=>p.v), mn = Math.min(...vs), mx = Math.max(...vs); return pts.map(p => ({d:p.d, v:(p.v - mn)/((mx-mn)||1)*100})); };
-    $("aVo2").innerHTML = grafLinhas([{pts:norm(vo2), cor:"#AF52DE", ponta:true}, {pts:norm(fc), cor:"#FF375F", ponta:true, w:1.8}], {de, ate, semEixo:true, rotulo:"VO2max e FC de repouso"});
+  if (vo2.length >= 2){
+    $("aVo2").innerHTML = grafLinhas([{pts:vo2, cor:"#AF52DE", ponta:true}], {de, ate, c:1, rotulo:"VO2max"});
+    $("aVo2Hero").innerHTML = `<b>${nf(vo2.at(-1).v,1)}</b><span>VO2max agora</span>`;
+  } else { $("aVo2").innerHTML = `<p class="vazio">Sem dados neste período.</p>`; $("aVo2Hero").innerHTML = ""; }
+  if (fc.length >= 2){
+    $("aFc").innerHTML = grafLinhas([{pts:fc, cor:"#FF375F", ponta:true}], {de, ate, rotulo:"FC de repouso"});
+    $("aFcHero").innerHTML = `<b>${nf(fc.at(-1).v)}</b><span>bpm, média de 7 dias</span>`;
+  } else { $("aFc").innerHTML = `<p class="vazio">Sem dados neste período.</p>`; $("aFcHero").innerHTML = ""; }
+  if (vo2.length >= 2 && fc.length >= 2){
     const v0 = vo2[0], v1 = vo2.at(-1), f0 = fc[0], f1 = fc.at(-1);
-    $("aVo2Txt").innerHTML = `${v0 ? `VO2max: <b>${nf(v0.v,1)}</b> → <b>${nf(v1.v,1)}</b>. ` : ""}${f0 ? `FC de repouso (média 7 d): <b>${nf(f0.v)}</b> → <b>${nf(f1.v)} bpm</b>. ` : ""}` + (v0 && f0 ? (v1.v < v0.v && f1.v > f0.v ? "O desenho atual é o de destreino: VO2max caindo e FC de repouso subindo. Com a retomada, as linhas devem voltar a se afastar, VO2max para cima e FC para baixo."
-      : v1.v >= v0.v && f1.v <= f0.v ? "VO2max subindo e FC de repouso caindo: é o desenho de quem está ganhando forma." : "Sinais mistos no período. Vale olhar de novo daqui a 4 semanas de plano cumprido.") : "") + ` <span class="texto-apagado">Linhas em escala relativa para comparar a tendência.</span>`;
-  } else { $("aVo2").innerHTML = `<p class="vazio">Sem dados neste período.</p>`; $("aVo2Txt").textContent = ""; }
+    $("aVo2Txt").innerHTML = (v1.v < v0.v && f1.v > f0.v ? "O desenho atual é o de destreino: VO2max caindo e FC de repouso subindo. Com a retomada, as linhas devem voltar a se afastar, VO2max para cima e FC para baixo."
+      : v1.v >= v0.v && f1.v <= f0.v ? "VO2max subindo e FC de repouso caindo: é o desenho de quem está ganhando forma." : "Sinais mistos no período. Vale olhar de novo daqui a 4 semanas de plano cumprido.");
+  } else { $("aVo2Txt").textContent = ""; }
 }
 
 /* ---------- ATIVIDADES ---------- */
