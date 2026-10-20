@@ -240,6 +240,8 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
 .rec th{font-weight:500;color:var(--apagado);font-size:12.5px}
 .rec td.t{font:700 21px/1 var(--cond)}
 .rec td small{display:block;font-size:11.5px;color:var(--apagado)}
+.comp td{font-size:13.5px} .comp tr.hj{background:var(--painel2)}
+.comp .st{font-size:11.5px;padding:3px 8px;border-radius:999px;white-space:nowrap}
 
 .rodape{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--fraco);font-size:12.5px;padding:6px 6px 0;flex-wrap:wrap}
 .rodape button{background:var(--painel);border:0;border-radius:999px;padding:8px 14px;font:600 14px/1 var(--cond);color:var(--apagado);cursor:pointer}
@@ -315,6 +317,10 @@ blockquote{margin-top:14px;font-size:15px;line-height:1.5;border-left:4px solid 
     <div class="mesnav"><button type="button" id="pAnt" aria-label="Mês anterior">‹</button><b id="pMes"></b><button type="button" id="pProx" aria-label="Próximo mês">›</button></div>
     <div class="cal" id="pCal"></div>
     <p class="texto-apagado" style="margin-top:10px;font-size:12.5px">À direita, km planejados e feitos na semana. Semanas futuras são projeção e se ajustam ao que você cumprir.</p>
+  </div>
+  <div class="painel">
+    <h2>Proposto × executado <small>esta semana</small></h2>
+    <table class="rec comp" id="pComp"><thead><tr><th></th><th>Proposto</th><th>Executado</th><th></th></tr></thead><tbody></tbody></table>
   </div>
   <div class="painel treino" id="pDia"></div>
   <div class="painel">
@@ -709,12 +715,37 @@ function renderHoje(){
 
 /* ---------- PLANO ---------- */
 function abrirDia(iso){ estado.p.sel = iso; estado.p.mes = iso.slice(0,7); renderPlano(); irPara("plano"); }
+function renderComparativoSemana(hoje){
+  const seg = addDias(hoje, -dow(hoje));
+  const COR_ST = {cumprido:"var(--verde)", parcial:"var(--amarelo)", faltou:"var(--vermelho)", extra:"var(--azul)", folga:"var(--fraco)", futuro:"var(--fraco)", hoje:"var(--azul)"};
+  const TXT_ST = {cumprido:"Feito", parcial:"Parcial", faltou:"Não feito", extra:"Extra", folga:"Descanso", futuro:"A seguir", hoje:"Hoje"};
+  const linhas = [...Array(7)].map((_,i) => {
+    const iso = addDias(seg, i), pl = planoDe(iso), re = realDe(iso), corr = re.filter(a => ehCorrida(a.tipo)), sv = pl.sessao;
+    const planTxt = !pl.conhecido ? "–" : sv ? (sv.tipo === "corrida" ? `${nf(sv.km,1)} km` : sv.titulo) : "Descanso";
+    const kmCorr = corr.reduce((s,a)=>s+a.km,0);
+    let realTxt = "–";
+    if (corr.length) realTxt = `${nf(kmCorr,1)} km${corr[0].pace ? ` · ${pace(corr[0].pace)}/km` : ""}`;
+    else if (re.length) realTxt = `${tipoNome(re[0].tipo)}, ${nf(re.reduce((s,a)=>s+a.min,0))} min`;
+    let status;
+    if (iso > hoje) status = "futuro";
+    else if (!sv) status = re.length ? "extra" : "folga";
+    else if (sv.tipo === "corrida") status = corr.length ? (kmCorr >= sv.km * 0.85 ? "cumprido" : "parcial") : (iso < hoje ? "faltou" : "hoje");
+    else status = re.some(a => a.tipo === "strength_training") ? "cumprido" : (iso < hoje ? "faltou" : "hoje");
+    return {dia: DIAS_SEM[i], data: iso, planTxt, realTxt, status};
+  });
+  $("pComp").querySelector("tbody").innerHTML = linhas.map(l =>
+    `<tr class="${l.data === hoje ? "hj" : ""}"><td>${l.dia}<br><span class="texto-apagado" style="font-size:11px">${dBR(l.data)}</span></td>` +
+    `<td>${esc(l.planTxt)}</td><td>${esc(l.realTxt)}</td>` +
+    `<td><span class="st" style="background:${COR_ST[l.status]}22;color:${COR_ST[l.status]}">${TXT_ST[l.status]}</span></td></tr>`
+  ).join("");
+}
 function renderPlano(){
   const P = estado.p, hoje = D.hoje.data;
   if (!P.mes) P.mes = hoje.slice(0,7); if (!P.sel) P.sel = hoje;
   const [ano, mes] = P.mes.split("-").map(Number);
   $("pMes").textContent = `${cap(MESES_L[mes-1])} de ${ano}`;
   $("pFase").textContent = D.coach.fase ? `${cap(D.coach.fase)}, ${(D.coach.semana||"").toLowerCase()}` : "";
+  renderComparativoSemana(hoje);
   const prim = `${P.mes}-01`, ult = `${P.mes}-${String(new Date(ano, mes, 0).getDate()).padStart(2,"0")}`;
   let html = DIAS_SEM.map(d => `<div class="cab">${d}</div>`).join("") + `<div class="cab">km</div>`;
   for (let w = addDias(prim, -dow(prim)); w <= addDias(ult, 6 - dow(ult)); w = addDias(w, 7)){
