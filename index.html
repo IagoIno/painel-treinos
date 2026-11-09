@@ -18,7 +18,7 @@
   --fundo:#E9EDF2; --card:#FFFFFF; --card2:#F5F7FA; --linha:#DCE2EA; --grade:#EDF0F4;
   --texto:#0F1B2D; --apagado:#5B6778; --fraco:#8A94A6;
   --ok:#1E9E5A; --ok-f:#E6F5EC; --at:#D99A00; --at-f:#FDF4DC; --cr:#D7263D; --cr-f:#FBE6E8; --ne:#8A94A6; --ne-f:#EEF1F5;
-  --corrida:#1F6FEB; --forca:#7A4BD8; --sono:#3D4FA8; --hrv:#0E9384; --carga:#E2711D;
+  --corrida:#1F6FEB; --forca:#7A4BD8; --natacao:#0891B2; --sono:#3D4FA8; --hrv:#0E9384; --carga:#E2711D;
   --raio:10px; --sombra:0 1px 2px rgba(15,27,45,.06),0 1px 1px rgba(15,27,45,.04);
   --num:"SF Mono","Cascadia Mono","Segoe UI Mono",ui-monospace,Menlo,Consolas,monospace;
 }
@@ -175,7 +175,7 @@ main{max-width:1280px;margin:0 auto;padding:14px 12px calc(28px + env(safe-area-
 .mapa{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;overflow-x:auto;padding-bottom:4px}
 .mapa i{width:13px;height:13px;border-radius:3px;background:var(--grade)}
 .mapa i.f{background:var(--forca)}.mapa i.c{background:var(--corrida)}.mapa i.a{background:linear-gradient(135deg,var(--forca) 50%,var(--corrida) 50%)}
-.mapa i.o{background:#9DB4D3}.mapa i.h{outline:2px solid var(--marinho)}
+.mapa i.n{background:var(--natacao)}.mapa i.o{background:#9DB4D3}.mapa i.h{outline:2px solid var(--marinho)}
 
 /* listas de sessões */
 .sessoes{display:grid;gap:6px}
@@ -186,7 +186,11 @@ main{max-width:1280px;margin:0 auto;padding:14px 12px calc(28px + env(safe-area-
 .sessao .t span{display:block;font-size:12px;font-weight:400;color:var(--apagado)}
 .sessao .k{font:700 14px var(--num);text-align:right}
 .sessao .k span{display:block;font:500 11px var(--num);color:var(--fraco)}
-.sessao.forc{border-left:3px solid var(--forca)}.sessao.corr{border-left:3px solid var(--corrida)}.sessao.outr{border-left:3px solid var(--fraco)}
+.sessao.forc{border-left:3px solid var(--forca)}.sessao.corr{border-left:3px solid var(--corrida)}.sessao.outr{border-left:3px solid var(--fraco)}.sessao.nata{border-left:3px solid var(--natacao)}
+.evol{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.evol div{background:var(--card2);border-radius:8px;padding:10px 12px;border-left:4px solid var(--ne)}
+.evol div.ok{border-left-color:var(--ok)}.evol div.at{border-left-color:var(--at)}.evol div.cr{border-left-color:var(--cr)}
+.evol b{display:block;font-size:13.5px}.evol span{font-size:12.5px;color:var(--apagado)}
 
 /* dia do plano */
 .dia{display:grid;grid-template-columns:58px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--grade)}
@@ -246,6 +250,7 @@ details[open] summary{margin-bottom:4px}
     <button class="aba" data-v="saude"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>Recuperação</button>
     <button class="aba" data-v="forca"><svg viewBox="0 0 24 24"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Força</button>
     <button class="aba" data-v="corrida"><svg viewBox="0 0 24 24"><path d="M13 4a2 2 0 1 0 0 .1M9 21l3-6 3 2v4M7 12l3-3 4 1 2 3 3 1"/></svg>Corrida</button>
+    <button class="aba" data-v="natacao"><svg viewBox="0 0 24 24"><path d="M3 18c2 0 2-1.5 4.5-1.5S10 18 12 18s2-1.5 4.5-1.5S19 18 21 18M3 13c2 0 2-1.5 4.5-1.5S10 13 12 13s2-1.5 4.5-1.5S19 13 21 13"/><path d="M8 9l3-3 3 2"/><circle cx="16.5" cy="6" r="1.5"/></svg>Natação</button>
   </nav>
 </header>
 
@@ -275,7 +280,7 @@ details[open] summary{margin-bottom:4px}
       <div class="legenda"><span><i style="background:var(--ok)"></i>feito</span><span><i style="background:var(--cr)"></i>não feito</span><span><i style="border:1.5px dashed var(--fraco)"></i>planejado</span><span><i style="background:var(--ok-f)"></i>extra</span></div></div>
     <div class="card c4"><h2>Coach</h2><div id="hCoach"></div></div>
     <div class="card c12"><h2>Constância <small>últimas 26 semanas</small></h2><div class="mapa" id="hMapa"></div>
-      <div class="legenda"><span><i style="background:var(--forca)"></i>força</span><span><i style="background:var(--corrida)"></i>corrida</span><span><i style="background:linear-gradient(135deg,var(--forca) 50%,var(--corrida) 50%)"></i>os dois</span><span><i style="background:#9DB4D3"></i>outro</span></div>
+      <div class="legenda"><span><i style="background:var(--forca)"></i>força</span><span><i style="background:var(--corrida)"></i>corrida</span><span><i style="background:linear-gradient(135deg,var(--forca) 50%,var(--corrida) 50%)"></i>força e corrida</span><span><i style="background:var(--natacao)"></i>natação</span><span><i style="background:#9DB4D3"></i>outro</span></div>
       <p class="nota" id="hMapaNota"></p></div>
   </div>
 </section>
@@ -337,6 +342,28 @@ details[open] summary{margin-bottom:4px}
     <div class="card c12"><h2>Corridas</h2><div class="sessoes" id="cSessoes"></div></div>
   </div>
 </section>
+
+<!-- ================= NATAÇÃO ================= -->
+<section class="view oculto" id="v-natacao">
+  <div class="grade">
+    <div class="card c12"><h2>Sua evolução <small id="nEvolSub"></small></h2><div class="evol" id="nEvol"></div><p class="nota" id="nDestaque"></p></div>
+    <div class="card c3 kpi st" id="nK1"></div>
+    <div class="card c3 kpi st" id="nK2"></div>
+    <div class="card c3 kpi st" id="nK3"></div>
+    <div class="card c3 kpi st" id="nK4"></div>
+    <div class="secao">Técnica no crawl · piscina de 25 m</div>
+    <div class="card c4"><h2>Tempo por piscina <small>segundos · menos é melhor</small></h2><div id="nTempo"></div></div>
+    <div class="card c4"><h2>Braçadas por piscina <small>menos é melhor</small></h2><div id="nBrac"></div></div>
+    <div class="card c4"><h2>SWOLF <small>tempo + braçadas · menos é melhor</small></h2><div id="nSwolf"></div></div>
+    <div class="secao">Volume e resistência</div>
+    <div class="card c6"><h2>Metros por aula</h2><div id="nVol"></div></div>
+    <div class="card c6"><h2>Tempo nadando <small>% da aula</small></h2><div id="nPct"></div></div>
+    <div class="card c6"><h2>Estilos <small>últimas 4 aulas</small></h2><div id="nEstilos"></div></div>
+    <div class="card c6"><h2>Águas abertas</h2><div id="nAguas"></div></div>
+    <div class="card c12"><h2>Sessões em piscina</h2><div class="sessoes" id="nSessoes"></div>
+      <p class="nota">O relógio às vezes erra a virada de quem está aprendendo e divide uma piscina em duas. Essas leituras impossíveis são descartadas: "metros válidos" conta só as piscinas com tempo plausível. Aula com educativo, prancha ou nado adaptado também fica registrada e pode deixar o tempo mais lento sem você ter piorado.</p></div>
+  </div>
+</section>
 </main>
 </div>
 
@@ -389,6 +416,8 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const CORRIDA = ["running","track_running","treadmill_running","trail_running"];
 const ehCorrida = a => CORRIDA.includes(a.tipo) && a.km > 0.5;
 const ehForca = a => a.tipo === "strength_training";
+const ehNatacao = a => a.tipo.includes("swimming");
+const mediana = xs => { xs = xs.filter(x => x != null && !isNaN(x)).sort((a, b) => a - b); if (!xs.length) return null; const m = xs.length >> 1; return xs.length % 2 ? xs[m] : (xs[m-1] + xs[m]) / 2; };
 const COR = {ok:"var(--ok)", at:"var(--at)", cr:"var(--cr)", ne:"var(--ne)"};
 const corGarmin = c => ({verde:"ok", amarelo:"at", vermelho:"cr"}[c] || "ne");
 const chip = (cls, txt) => `<span class="chip ${cls}"><i></i>${esc(txt)}</span>`;
@@ -433,7 +462,7 @@ function grafico(el, cfg){
     sr.v.forEach((v, i) => { if (v == null) { aberto = false; return; } d += (aberto ? "L" : "M") + XX(i).toFixed(1) + "," + Y(v).toFixed(1); aberto = true; });
     if (sr.area) { const pts = sr.v.map((v,i) => v == null ? null : [XX(i), Y(v)]).filter(Boolean);
       if (pts.length) s += `<path d="M${pts[0][0]},${Y(Math.max(lo,0))}L${pts.map(p => p.join(",")).join("L")}L${pts[pts.length-1][0]},${Y(Math.max(lo,0))}Z" fill="${sr.cor}" opacity=".12"/>`; }
-    s += `<path d="${d}" fill="none" stroke="${sr.cor}" stroke-width="${sr.larg||2}" stroke-linejoin="round" stroke-linecap="round" ${sr.tracejado ? 'stroke-dasharray="5 4"' : ""}/>`;
+    s += `<path d="${d}" fill="none" stroke="${sr.cor}" stroke-width="${sr.larg ?? 2}" stroke-linejoin="round" stroke-linecap="round" ${sr.tracejado ? 'stroke-dasharray="5 4"' : ""}/>`;
     if (sr.pontos) sr.v.forEach((v, i) => { if (v != null) s += `<circle cx="${XX(i)}" cy="${Y(v)}" r="${sr.pontos}" fill="${sr.corPonto || sr.cor}" opacity="${sr.opPonto || 1}"/>`; });
   });
   (cfg.rotX || []).forEach(([i, t]) => { s += `<text x="${XX(i)}" y="${H-5}" text-anchor="middle">${esc(t)}</text>`; });
@@ -504,7 +533,7 @@ function planoDoDia(data){
 }
 function feitoNoDia(data){
   const at = D.atividades.filter(a => a.data === data);
-  return {corrida: at.filter(ehCorrida), forca: at.filter(ehForca), outro: at.filter(a => !ehCorrida(a) && !ehForca(a))};
+  return {corrida: at.filter(ehCorrida), forca: at.filter(ehForca), natacao: at.filter(ehNatacao), outro: at.filter(a => !ehCorrida(a) && !ehForca(a))};
 }
 
 /* séries por grupo muscular a partir do que o relógio registrou */
@@ -659,7 +688,7 @@ function renderQuadro(){
   let h = `<div></div>`;
   for (let i = 0; i < 7; i++) { const d = somaDias(seg, i); h += `<div class="cab ${d === HOJE ? "hoje" : ""}">${DSEM[i]}<br>${dBR(d).slice(0,2)}</div>`; }
   let feitosF = 0, planF = 0, feitosC = 0, planC = 0;
-  for (const [cat, nome, ic] of [["forca", "Força", "F"], ["corrida", "Corrida", "C"]]) {
+  for (const [cat, nome, ic] of [["forca", "Força", "F"], ["corrida", "Corrida", "C"], ["natacao", "Natação", "N"]]) {
     h += `<div class="lin">${nome}</div>`;
     for (let i = 0; i < 7; i++) {
       const d = somaDias(seg, i), pl = planoDoDia(d).some(p => p.cat === cat), fe = feitoNoDia(d)[cat].length > 0;
@@ -680,7 +709,7 @@ function renderQuadro(){
 function renderMapa(){
   const fim = HOJE, ini = somaDias(segDe(HOJE), -25 * 7);
   const tipo = {};
-  D.atividades.forEach(a => { if (a.data < ini) return; const t = ehForca(a) ? "f" : ehCorrida(a) ? "c" : "o"; const x = tipo[a.data] || "";
+  D.atividades.forEach(a => { if (a.data < ini) return; const t = ehForca(a) ? "f" : ehCorrida(a) ? "c" : ehNatacao(a) ? "n" : "o"; const x = tipo[a.data] || "";
     tipo[a.data] = (x === "f" && t === "c") || (x === "c" && t === "f") || x === "a" ? "a" : x && x !== "o" ? x : t; });
   let h = "", dias = 0, ativos = 0;
   for (let d = ini; d <= somaDias(segDe(HOJE), 6); d = somaDias(d, 1)) {
@@ -688,7 +717,7 @@ function renderMapa(){
     if (!fut) { dias++; if (tipo[d]) ativos++; }
   }
   $("hMapa").innerHTML = h;
-  const sem = {}; D.atividades.forEach(a => { if (a.data >= ini && (ehForca(a) || ehCorrida(a))) sem[segDe(a.data)] = (sem[segDe(a.data)] || 0) + 1; });
+  const sem = {}; D.atividades.forEach(a => { if (a.data >= ini && (ehForca(a) || ehCorrida(a) || ehNatacao(a))) sem[segDe(a.data)] = (sem[segDe(a.data)] || 0) + 1; });
   const boas = Object.values(sem).filter(n => n >= 3).length;
   $("hMapaNota").textContent = `${ativos} dias treinados em ${dias} · ${boas} de 26 semanas com 3 treinos ou mais.`;
 }
@@ -905,12 +934,80 @@ function renderCorrida(){
     <div class="k">${tempo(c.min * 60)}<span>carga ${nf(c.carga)}</span></div></div>`).join("") || `<p class="vazio">Nenhuma corrida no período.</p>`;
 }
 
+/* ---------- render: NATAÇÃO (só evolução, sem treinos) ---------- */
+function renderNatacao(){
+  const todas = D.natacao || [];
+  const P = todas.filter(s => s.tipo === "lap_swimming" && s.piscina_m === 25 && s.validas != null);
+  const T = P.filter(s => (s.crawl_n || 0) >= 6);            // aulas com crawl suficiente para medir técnica
+  const AA = todas.filter(s => s.tipo === "open_water_swimming");
+  // evolução: metade mais recente das aulas contra a anterior (até 4 de cada lado)
+  const n = Math.min(4, Math.floor(T.length / 2));
+  const rec = T.slice(-n), ant = T.slice(-2 * n, -n);
+  const cmp = k => n ? [mediana(rec.map(s => s[k])), mediana(ant.map(s => s[k]))] : [null, null];
+  const linha = (rot, [a, b], un, lim, menorMelhor, casas = 0, pct = false) => {
+    if (a == null || b == null) return "";
+    const d = a - b, mud = pct ? Math.abs(d) / b >= lim : Math.abs(d) >= lim, melhor = menorMelhor ? d < 0 : d > 0;
+    const cls = !mud ? "" : melhor ? "ok" : "at";
+    const tx = !mud ? "estável" : melhor ? "melhorou" : menorMelhor ? "piorou um pouco" : "caiu";
+    return `<div class="${cls}"><b>${esc(rot)}: ${tx}</b><span>${nf(b, casas)} → ${nf(a, casas)}${un}</span></div>`; };
+  $("nEvolSub").textContent = n ? `últimas ${n} aulas contra as ${n} anteriores` : "";
+  $("nEvol").innerHTML = n ? linha("Metros por aula", cmp("dist_m"), " m", .15, false, 0, true) + linha("Tempo nadando", cmp("nadando_pct"), "% da aula", 4, false) +
+      linha("Maior trecho sem parar", cmp("maior_serie_m"), " m", 25, false) + linha("Braçadas no crawl", cmp("crawl_bracadas"), " por piscina", 1, true, 1) +
+      linha("SWOLF no crawl", cmp("crawl_swolf"), "", 2, true, 1) + linha("Tempo no crawl", cmp("crawl_tempo"), " s por piscina", 2, true, 1)
+    : `<p class="vazio">Ainda não há aulas suficientes para comparar.</p>`;
+  const melhor = T.length ? T.reduce((a, b) => b.crawl_swolf < a.crawl_swolf ? b : a) : null;
+  const longe = P.length ? P.reduce((a, b) => b.maior_serie_m > a.maior_serie_m ? b : a) : null;
+  $("nDestaque").innerHTML = melhor ? `<b>Melhor técnica registrada:</b> SWOLF ${nf(melhor.crawl_swolf, 1)} em ${dBR(melhor.data)}/${melhor.data.slice(2,4)}${melhor === T[T.length-1] ? " (a aula mais recente)" : ""}.` : "";
+  // indicadores
+  const ini30 = somaDias(HOJE, -29), n30 = todas.filter(s => s.data >= ini30).length;
+  const ult = todas[todas.length - 1], dias = ult ? Math.round((deIso(HOJE) - deIso(ult.data)) / 864e5) : null;
+  kpi($("nK1"), {rot: "Sessões em 30 dias", val: nf(n30), st: "ne", sub: `${todas.length} no histórico · última há ${dias ?? "–"} ${dias === 1 ? "dia" : "dias"}`});
+  const dm = cmp("dist_m");
+  kpi($("nK2"), {rot: "Metros por aula", val: nf(dm[0]), un: "m", st: "ne", sub: dm[1] != null ? `mediana das últimas ${n} · antes ${nf(dm[1])} m` : "", spark: P.slice(-12).map(s => s.dist_m), cor: "var(--natacao)"});
+  kpi($("nK3"), {rot: "Maior trecho sem parar", val: longe ? nf(longe.maior_serie_m) : "–", un: "m", st: "ne", sub: longe ? `recorde em ${dBR(longe.data)}/${longe.data.slice(2,4)}` : "", spark: P.slice(-12).map(s => s.maior_serie_m), cor: "var(--natacao)"});
+  const np = cmp("nadando_pct");
+  kpi($("nK4"), {rot: "Tempo nadando", val: nf(np[0]), un: "% da aula", st: "ne", sub: np[1] != null ? `antes ${nf(np[1])}% · o resto é pausa e explicação` : "", spark: P.slice(-12).map(s => s.nadando_pct), cor: "var(--natacao)"});
+  // gráficos de técnica
+  const rot = rotulosDatas(T.map(s => s.data), 4), nT = T.length;
+  const tec = (id, k, cor, fmt) => {
+    if (nT < 2) { $(id).innerHTML = `<p class="vazio">Poucas aulas com crawl.</p>`; return; }
+    const v = T.map(s => s[k]);
+    grafico($(id), {n: nT, rotX: rot, alt: 150, series: [{v, cor, larg: 0, pontos: 3.5, opPonto: .55}, {v: mm(v, 3), cor: "var(--marinho)", larg: 2.2}], legenda: [[cor, "cada aula"], ["var(--marinho)", "média de 3"]], fmt});
+  };
+  tec("nTempo", "crawl_tempo", "var(--natacao)", v => nf(v, 0));
+  tec("nBrac", "crawl_bracadas", "var(--natacao)", v => nf(v, 0));
+  tec("nSwolf", "crawl_swolf", "var(--natacao)", v => nf(v, 0));
+  // volume e tempo nadando
+  const rotP = rotulosDatas(P.map(s => s.data), 5);
+  if (P.length) {
+    grafico($("nVol"), {n: P.length, rotX: rotP, ymin: 0, barras: [{v: P.map(s => s.dist_m), cor: "var(--natacao)"}], series: [{v: P.map(s => s.dist_garmin), cor: "var(--fraco)", larg: 1.5, tracejado: true}],
+      legenda: [["var(--natacao)", "metros válidos"], ["var(--fraco)", "o que a Garmin somou"]]});
+    grafico($("nPct"), {n: P.length, rotX: rotP, ymin: 0, ymax: 50, barras: [{v: P.map(s => s.nadando_pct), cor: "rgba(8,145,178,.65)"}], fmt: v => nf(v) + "%"});
+  }
+  // estilos
+  const NOME = {FREESTYLE: ["Crawl", "var(--natacao)"], BREASTSTROKE: ["Peito", "var(--forca)"], BACKSTROKE: ["Costas", "var(--carga)"], BUTTERFLY: ["Borboleta", "var(--cr)"]};
+  const est = {}; P.slice(-4).forEach(s => Object.entries(s.estilos || {}).forEach(([k, v]) => est[k] = (est[k] || 0) + v));
+  const totE = Object.values(est).reduce((a, b) => a + b, 0);
+  $("nEstilos").innerHTML = totE ? `<div class="barras">${Object.entries(est).sort((a, b) => b[1] - a[1]).map(([k, v]) => { const [nm, c] = NOME[k] || [k, "var(--fraco)"];
+      return `<div class="bar"><span>${nm}</span><div class="trilho"><div class="enc" style="width:${v / totE * 100}%;background:${c}"></div></div><span class="v">${nf(v / totE * 100)}%</span></div>`; }).join("")}</div>
+    <p class="nota">O relógio identifica o estilo pelo movimento do braço e pode confundir em nado ainda em aprendizado.</p>` : `<p class="vazio">Sem dados.</p>`;
+  // águas abertas
+  $("nAguas").innerHTML = AA.length ? `<table class="tabela"><thead><tr><th>Data</th><th class="n">Distância</th><th class="n">Nadando</th><th class="n">/100 m</th><th class="n">FC</th></tr></thead><tbody>
+    ${AA.slice().reverse().map(s => `<tr><td>${dBR(s.data)}/${s.data.slice(2,4)}</td><td class="n">${nf(s.dist_m)} m</td><td class="n">${nf(s.nado_min)} min</td><td class="n">${pace(s.ritmo_100)}</td><td class="n">${nf(s.fc)}</td></tr>`).join("")}</tbody></table>
+    <p class="nota">Distância por GPS, que oscila na água. Serve para acompanhar o volume; não compare o ritmo com o da piscina.</p>` : `<p class="vazio">Nenhuma sessão em águas abertas.</p>`;
+  // sessões
+  $("nSessoes").innerHTML = P.slice().reverse().map(s => { const q = s.validas_pct, c = q >= 80 ? "ok" : q >= 65 ? "at" : "cr";
+    return `<div class="sessao nata"><div class="d">${DSEM[dsem(s.data)]}<b>${dBR(s.data)}</b></div>
+      <div class="t">${nf(s.dist_m)} m válidos <span>${s.crawl_n >= 6 ? `crawl ${nf(s.crawl_tempo)} s · ${nf(s.crawl_bracadas, 1)} braçadas · SWOLF ${nf(s.crawl_swolf, 1)}` : "pouco crawl para medir técnica"} · maior trecho ${nf(s.maior_serie_m)} m</span></div>
+      <div class="k">${chip(c, `leitura ${q}%`)}<span>${nf(s.nado_min)} de ${nf(s.total_min)} min</span></div></div>`; }).join("") || `<p class="vazio">Nenhuma sessão em piscina.</p>`;
+}
+
 /* ---------- geral ---------- */
 function renderTudo(){
   montarSerie();
   const g = D.gerado_em ? new Date(D.gerado_em) : null;
   $("tAtual").innerHTML = g ? `atualizado<br>${String(g.getDate()).padStart(2,"0")}/${MESES[g.getMonth()]} ${String(g.getHours()).padStart(2,"0")}:${String(g.getMinutes()).padStart(2,"0")}` : "";
-  for (const [f, nome] of [[renderHoje, "hoje"], [renderPlano, "plano"], [renderSaude, "saude"], [renderForca, "forca"], [renderCorrida, "corrida"]]) {
+  for (const [f, nome] of [[renderHoje, "hoje"], [renderPlano, "plano"], [renderSaude, "saude"], [renderForca, "forca"], [renderCorrida, "corrida"], [renderNatacao, "natacao"]]) {
     try { f(); } catch (e) { console.error("falha ao montar", nome, e); }
   }
   avisoNovo();
